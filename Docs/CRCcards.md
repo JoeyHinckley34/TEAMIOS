@@ -1,6 +1,7 @@
 # CRC cards
 
 Create a Class Responsibility Collaborator card for each class
+[More info on CRC cards](http://www.agilemodeling.com/artifacts/crcModel.htm)
 
 ### Format :
 
@@ -8,4 +9,14 @@ Create a Class Responsibility Collaborator card for each class
 | :---: | :---: | 
 | Responsibilities | Collaborators |
 
-### Tower Class
+
+ ---
+ 
+ 
+|  Tower ||
+| :---: | :---: | 
+| ID number <br />
+name <br />
+damage < 
+type of attack <br />
+| Enemy |
