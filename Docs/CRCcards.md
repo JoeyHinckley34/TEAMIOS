@@ -15,8 +15,4 @@ Create a Class Responsibility Collaborator card for each class
  
 |  Tower ||
 | :---: | :---: | 
-| ID number <br />
-name <br />
-damage < 
-type of attack <br />
-| Enemy |
+| ID number <br />name <br />damage <br /> type of attack <br />| Enemy |
