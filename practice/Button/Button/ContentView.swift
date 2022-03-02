@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var ClickCount = 0
+    @State private var ClickCount = 1
     
     var body: some View {
         Button ( "Tap Count: \(ClickCount)"){
-            ClickCount += 1
+            ClickCount *= 2
         }
         .padding()
     }

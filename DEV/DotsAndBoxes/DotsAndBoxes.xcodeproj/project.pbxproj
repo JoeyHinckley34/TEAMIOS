@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		90AF8EB427CF302400298466 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AF8EB327CF302400298466 /* Node.swift */; };
+		90AF8EB727CF30D300298466 /* NodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AF8EB627CF30D300298466 /* NodeView.swift */; };
+		90AF8EB927CF354E00298466 /* Enemies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AF8EB827CF354E00298466 /* Enemies.swift */; };
+		90AF8EBB27CF35D600298466 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AF8EBA27CF35D600298466 /* Helpers.swift */; };
 		90B9BB5327CDDE9E00BC653B /* DotsAndBoxesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B9BB5227CDDE9E00BC653B /* DotsAndBoxesApp.swift */; };
 		90B9BB5527CDDE9E00BC653B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B9BB5427CDDE9E00BC653B /* ContentView.swift */; };
 		90B9BB5727CDDEA000BC653B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90B9BB5627CDDEA000BC653B /* Assets.xcassets */; };
@@ -15,6 +19,7 @@
 		90B9BB6E27CDDEA000BC653B /* DotsAndBoxesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B9BB6D27CDDEA000BC653B /* DotsAndBoxesUITests.swift */; };
 		90B9BB7027CDDEA000BC653B /* DotsAndBoxesUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B9BB6F27CDDEA000BC653B /* DotsAndBoxesUITestsLaunchTests.swift */; };
 		90B9BB7E27CDDEEB00BC653B /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B9BB7D27CDDEEB00BC653B /* Pixel.swift */; };
+		90B9BB8027CF26E000BC653B /* Tower.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B9BB7F27CF26E000BC653B /* Tower.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +40,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		90AF8EB327CF302400298466 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		90AF8EB627CF30D300298466 /* NodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeView.swift; sourceTree = "<group>"; };
+		90AF8EB827CF354E00298466 /* Enemies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemies.swift; sourceTree = "<group>"; };
+		90AF8EBA27CF35D600298466 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		90B9BB4F27CDDE9E00BC653B /* DotsAndBoxes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DotsAndBoxes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90B9BB5227CDDE9E00BC653B /* DotsAndBoxesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotsAndBoxesApp.swift; sourceTree = "<group>"; };
 		90B9BB5427CDDE9E00BC653B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -46,6 +55,7 @@
 		90B9BB6D27CDDEA000BC653B /* DotsAndBoxesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotsAndBoxesUITests.swift; sourceTree = "<group>"; };
 		90B9BB6F27CDDEA000BC653B /* DotsAndBoxesUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotsAndBoxesUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		90B9BB7D27CDDEEB00BC653B /* Pixel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pixel.swift; sourceTree = "<group>"; };
+		90B9BB7F27CF26E000BC653B /* Tower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tower.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +83,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		90AF8EB527CF30B100298466 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				90AF8EB627CF30D300298466 /* NodeView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		90B9BB4627CDDE9E00BC653B = {
 			isa = PBXGroup;
 			children = (
@@ -96,11 +114,13 @@
 		90B9BB5127CDDE9E00BC653B /* DotsAndBoxes */ = {
 			isa = PBXGroup;
 			children = (
+				90B9BB5427CDDE9E00BC653B /* ContentView.swift */,
+				90AF8EB527CF30B100298466 /* Views */,
 				90B9BB7C27CDDECC00BC653B /* Componets */,
 				90B9BB5227CDDE9E00BC653B /* DotsAndBoxesApp.swift */,
-				90B9BB5427CDDE9E00BC653B /* ContentView.swift */,
 				90B9BB5627CDDEA000BC653B /* Assets.xcassets */,
 				90B9BB5827CDDEA000BC653B /* Preview Content */,
+				90AF8EBA27CF35D600298466 /* Helpers.swift */,
 			);
 			path = DotsAndBoxes;
 			sourceTree = "<group>";
@@ -134,6 +154,9 @@
 			isa = PBXGroup;
 			children = (
 				90B9BB7D27CDDEEB00BC653B /* Pixel.swift */,
+				90B9BB7F27CF26E000BC653B /* Tower.swift */,
+				90AF8EB327CF302400298466 /* Node.swift */,
+				90AF8EB827CF354E00298466 /* Enemies.swift */,
 			);
 			path = Componets;
 			sourceTree = "<group>";
@@ -269,8 +292,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				90B9BB5527CDDE9E00BC653B /* ContentView.swift in Sources */,
+				90AF8EB427CF302400298466 /* Node.swift in Sources */,
+				90AF8EB727CF30D300298466 /* NodeView.swift in Sources */,
+				90AF8EBB27CF35D600298466 /* Helpers.swift in Sources */,
 				90B9BB7E27CDDEEB00BC653B /* Pixel.swift in Sources */,
 				90B9BB5327CDDE9E00BC653B /* DotsAndBoxesApp.swift in Sources */,
+				90AF8EB927CF354E00298466 /* Enemies.swift in Sources */,
+				90B9BB8027CF26E000BC653B /* Tower.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
