@@ -36,13 +36,13 @@ struct ContentView: View {
         .background(Color.blue)
         
         
-        .gesture(
-            DragGesture(minimumDistance: 0)
-                .onEnded{ drag in
-                    let newNode = Node(position: drag.location, health: 10)
-                    NodeView (node: newNode)
-                }
-        )
+//        .gesture(
+//            DragGesture(minimumDistance: 0)
+//                .onEnded{ drag in
+//                    let newNode = Node(position: drag.location, health: 10)
+//                    NodeView (node: newNode)
+//                }
+//        )
         
     }
     
@@ -51,7 +51,9 @@ struct ContentView: View {
     
     func moveEnemy(){
         if(self.enemiePosition.y > 1100){
-            self.enemiePosition.y = -10
+            withAnimation{
+                self.enemiePosition.y = -10
+            }
         }
         withAnimation{
             self.enemiePosition.y += 30
