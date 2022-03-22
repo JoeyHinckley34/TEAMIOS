@@ -17,7 +17,7 @@ struct ContentView: View {
     
     var body: some View {
         
-        GeometryReader {   geo in
+        GeometryReader { geo in
             ZStack{
                 let NewNode = Node(position: enemiePosition, health: 10)
                 NodeView (node: NewNode)
@@ -34,10 +34,7 @@ struct ContentView: View {
         }
         .edgesIgnoringSafeArea(.all)
         .background(Color.blue)
-                
     }
-    
-    
     
     func moveEnemy(){
         if(self.enemiePosition.y > UIScreen.main.bounds.height+10){
