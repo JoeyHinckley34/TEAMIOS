@@ -51,9 +51,7 @@ struct ContentView: View {
     
     func moveEnemy(){
         if(self.enemiePosition.y > 1100){
-            withAnimation{
-                self.enemiePosition.y = -10
-            }
+            self.enemiePosition.y = -10
         }
         withAnimation{
             self.enemiePosition.y += 30
