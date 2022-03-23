@@ -13,6 +13,14 @@ struct NewView:Identifiable{
 }
 
 
+struct Enemie:Identifiable{
+    var id = UUID()
+    var location:CGPoint
+    var health:CGFloat
+}
+
+
+
 struct ContentView: View {
     
     @State var novelViews:[NewView] = []
@@ -45,7 +53,8 @@ struct ContentView: View {
             ZStack{
                 Text("Last Tap: \(self.lastTapLocation.debugDescription)")
                 ForEach(novelViews, id: \.id){thisView in
-                    Circle().frame(width: 20, height: 20)
+                    Rectangle().frame(width: 20, height: 20)
+                    //Circle().frame(width: 20, height: 20)
                         .offset(self.getOffset(thisView.location))
                 }
             }
