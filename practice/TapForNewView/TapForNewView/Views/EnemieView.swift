@@ -7,7 +7,7 @@
 import Foundation
 import SwiftUI
 
-struct NodeView: View{
+struct EnemieView: View{
     var enemy: Enemy
     var body: some View {
         Circle()

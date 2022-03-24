@@ -29,8 +29,10 @@ struct ContentView: View {
     @State var enemieViews:[Enemie] = []
     @State var lastTapLocation:CGPoint = .zero
 
-    let taplocation = CGPoint(x: UIScreen.main.bounds.width/2, y: 100)
+    let taplocation = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height-UIScreen.main.bounds.height/20)
     
+    let start = CGPoint(x: UIScreen.main.bounds.width/2, y: .zero)
+    let end = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height)
     
     let timer = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()
     
@@ -39,12 +41,34 @@ struct ContentView: View {
     var body: some View {
         return Group{
             ZStack {
+                Path { path in
+                    path.move(to: start)
+                    path.addLine(to: end)
+                }
+                .stroke(.green,lineWidth: 50)
+                
+                let NewEnemy = Enemy(position: enemiePosition, health: 10)
+                EnemieView (enemy: NewEnemy)
+                    .onReceive(self.timer){ _ in
+                        self.moveEnemy()
+                    }
+                
                 Text("New Tower Location \(self.lastTapLocation.debugDescription)")
                     .position(taplocation)
-                
+                //loop throughh every view and add a rectangle at its location
                 ForEach(novelViews, id: \.id){ thisView in
                     Rectangle().frame(width: 20, height: 20)
                         .offset(self.getOffset(thisView.location))
+                    //Loop through every other view and add path to it
+                    ForEach(novelViews, id: \.id){ otherView in
+                        Path{ path in
+                            path.move(to: thisView.location)
+                            path.addLine(to: otherView.location)
+                        }
+                        .stroke(.blue,lineWidth: 3)
+                    }
+                    
+                    
                 }
            
             }
@@ -67,6 +91,18 @@ struct ContentView: View {
                     self.lastTapLocation = value.startLocation
                     print("value changing")
                 })
+            .ignoresSafeArea()
+        }
+    
+    }
+    
+    func moveEnemy(){
+        if(self.enemiePosition.y > UIScreen.main.bounds.height+10){
+            self.enemiePosition.y = -10
+            //Lives -= 1
+        }
+        withAnimation{
+            self.enemiePosition.y += 30
         }
     }
     
