@@ -17,6 +17,9 @@ Create a Class Responsibility Collaborator card for each class <br />
 | :---: | :---: | 
 | ID number <br />Name <br />Damage <br /> Type of attack <br />Cost <br /> Upgrades <br /> Sprite <br />| Enemy |
 
+| TowerView ||
+| :---: | :---: | 
+| Tower <br />Shape <br />| Tower |
 
 |  Enemy ||
 | :---: | :---: | 
