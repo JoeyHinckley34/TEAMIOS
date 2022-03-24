@@ -23,44 +23,50 @@ struct Enemie:Identifiable{
 
 struct ContentView: View {
     
+    @State private var enemiePosition = CGPoint(x: UIScreen.main.bounds.width/2, y:-10)
+    
     @State var novelViews:[NewView] = []
+    @State var enemieViews:[Enemie] = []
     @State var lastTapLocation:CGPoint = .zero
+
+    let taplocation = CGPoint(x: UIScreen.main.bounds.width/2, y: 100)
+    
+    
+    let timer = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()
     
     @GestureState private var dragState = DragState.inactive
     
     var body: some View {
-        
-        let drag = DragGesture(minimumDistance: 0, coordinateSpace: .global)
-            .updating($dragState) { drag, state, transaction in
-                state = .dragging(translation: drag.translation)
-            }
-            .onEnded{value in
-                let startLoc = value.startLocation
-                let endLoc = value.location
-                
-                if (abs(startLoc.x - endLoc.x) <= 10 && abs(startLoc.y - endLoc.y) <= 10){
-                    print("tap found")
-                    self.novelViews.append(NewView(location: startLoc))
-                }
-            }
-            .onChanged{value in
-                self.lastTapLocation = value.startLocation
-                print("value changing")
-            }
-    
-        
         return Group{
-            ZStack{
-                Text("Last Tap: \(self.lastTapLocation.debugDescription)")
-                ForEach(novelViews, id: \.id){thisView in
+            ZStack {
+                Text("New Tower Location \(self.lastTapLocation.debugDescription)")
+                    .position(taplocation)
+                
+                ForEach(novelViews, id: \.id){ thisView in
                     Rectangle().frame(width: 20, height: 20)
-                    //Circle().frame(width: 20, height: 20)
                         .offset(self.getOffset(thisView.location))
                 }
+           
             }
                 .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                 .background(Color.white)
-            .gesture(drag)
+            .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .global)
+                .updating($dragState) { drag, state, transaction in
+                    state = .dragging(translation: drag.translation)
+                }
+                .onEnded{value in
+                    let startLoc = value.startLocation
+                    let endLoc = value.location
+                    
+                    if (abs(startLoc.x - endLoc.x) <= 10 && abs(startLoc.y - endLoc.y) <= 10){
+                        print("tap found")
+                        self.novelViews.append(NewView(location: startLoc))
+                    }
+                }
+                .onChanged{value in
+                    self.lastTapLocation = value.startLocation
+                    print("value changing")
+                })
         }
     }
     

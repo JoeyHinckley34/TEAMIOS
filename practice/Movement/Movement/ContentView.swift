@@ -9,9 +9,12 @@ import SwiftUI
 
 
 struct ContentView: View {
-    @State private var enemiePosition = CGPoint(x: UIScreen.main.bounds.width/2, y:-10)
+    @State private var enemiePosition = CGPoint(x: UIScreen.main.bounds.width/2, y:.zero-10)
     
     @State private var Lives = Double(20)
+    
+    let start = CGPoint(x: UIScreen.main.bounds.width/2, y: .zero)
+    let end = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height)
     
     let timer = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()
     
@@ -19,11 +22,18 @@ struct ContentView: View {
         
         GeometryReader { geo in
             ZStack{
+                Path{ path in
+                    path.move(to: start )
+                    path.addLine(to: end)
+                }
+                .stroke(.green, lineWidth: 40)
                 let NewNode = Node(position: enemiePosition, health: 10)
                 NodeView (node: NewNode)
                     .onReceive(self.timer){ _ in
                         self.moveEnemy()
                     }
+                //self.view.bringSubviewToFront(NodeView)
+                
             }
             VStack(alignment: .center){
                 Text("Enemie Position:")
@@ -56,5 +66,11 @@ extension Double {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+struct Previews_ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
     }
 }
