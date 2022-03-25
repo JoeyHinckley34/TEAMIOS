@@ -5,25 +5,18 @@ class sprinter: Enemy {
     #define SPEED_2 2
     #define ID 2
     #define REWARD 100
-    
-    override var speed: Int  { get { return SPEED } }
-    override var hpMax: Int  { get { return MAX_HEALTH } }
-    override var ID: Int     { get { return ID } }
-    
     var isFast: Bool
 
-    override init() { init(x: 0, y: 0) }
+    override init() {
+        isFast = true
 
-    override init(x: Int, y: Int){
-        isFast = false:
-        super.init(x: x, y: y, speed: SPEED_1, hpMax: MAX_HEALTH)
-    }
-
-    override func getReward() -> Int { 
-        if(isDead)
-            return REWARD
-        return 0
-    }
+        speed = SPEED
+        hpMax = MAX_HEALTH
+        id = ID
+        reward = REWARD
+        super.init()
+     }
+}
 
     func getSpeed() -> Int {
         isFast = !(isFast)
@@ -33,7 +26,21 @@ class sprinter: Enemy {
         return SPEED_2
     }
 
-    override func advance(){
-        
+    //very much not done
+    override func advance(var movePath: [CGPoint]){
+        path = movePath
+        if movePath.count > 0{
+            let nextLocation = movePath.removeFirst()
+            
+            let distance = distanceBetweenPoints(position, second: nextLocation)
+            let duration = durationToMove(distance, distancePerSecond: getSpeed() /*ms*/)
+            let moveAction = SKAction.sequence([SKAction.moveTo(nextLocation, duration: duration), SKAction.runBlock({self.moveAlongPath(movePath)})])
+            runAction(moveAction, withKey: GlobalConstants.keyMove)
+           
+        }
+        else{
+            arrived = true
+            removeFromParent()
+        }
     }
 }
