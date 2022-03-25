@@ -20,7 +20,7 @@ class sniper: Tower{
     
     func attack(enemy: Enemy){
         if canAttack{
-            if !unit.isAlive() || distanceToNode(unit) > range{
+            if !enemy.isAlive() || distanceToNode(unit) > range{
                 hasTarget = false
                 return
             }
