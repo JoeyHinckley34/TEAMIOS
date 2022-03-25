@@ -1,58 +1,58 @@
-class Enemy {
+
+
+import Foundation
+import SpriteKit
+
+class Enemy: SKNode {
     //REPRESENTATION:
-    var xPos: Int
-    var yPos: Int
     var hp: Int
-    var isDead: Bool
+    var isAlive = true
+    var arrived = false
+    var path: [CGPoint] = []
 
-    //Overriden default reps
-    var speed: Int  { get { return 3 } }
-    var hpMax: Int  { get { return 100 } }
-    var ID: Int     { get { return 0 } }
+    //Class Specific
+    var speed: Int
+    var hpMax: Int
+    var id: Int
+    var reward: Int
 
-    init(){
-        init(x: 0, y: 0)
-    }
-
-    init(x: Int, y: Int){
-        xPos = x
-        yPos = y
-        isDead = false
+    override init(){
         hp = hpMax
+
+        super.init()
     }
 
-    //HOW DOES PATH WORK????
-    func advance(path: /*help*/){
-        path[]
+    //very much not done
+    func advance(var movePath: [CGPoint]){
+        path = movePath
+        if movePath.count > 0{
+            let nextLocation = movePath.removeFirst()
+            
+            let distance = distanceBetweenPoints(position, second: nextLocation)
+            let duration = durationToMove(distance, distancePerSecond: ms)
+            let moveAction = SKAction.sequence([SKAction.moveTo(nextLocation, duration: duration), SKAction.runBlock({self.moveAlongPath(movePath)})])
+            runAction(moveAction, withKey: GlobalConstants.keyMove)
+           
+        }
+        else{
+            arrived = true
+            removeFromParent()
+        }
     }
 
     func getReward() -> Int { 
-        if(isDead)
-            return 100
+        if(!isAlive)
+            return reward
         return 0
     }
 
     func recieveDamage(dmg: Int){
         if(hp <= dmg){
-            isDead = true;
+            isAlive = false;
             hp = 0
+            removeFromParent()
         }else{
             hp -= dmg
         }
     }
 }
-
-/*
-//DEFINITIONS:
-    #define TYPE1_HEALTH 100
-    #define TYPE2_HEALTH 150
-    #define TYPE3_HEALTH 200
-    #define TYPE4_HEALTH 300
-    #define DEFAULT_HEALTH 100
-
-    #define TYPE1_SPEED 1
-    #define TYPE2_SPEED 2
-    #define TYPE3_SPEED 3
-    #define TYPE4_SPEED 5
-    #define DEFAULT_SPEED 1
-*/
