@@ -15,9 +15,12 @@ class Node: Identifiable {
     var previousPosition: CGPoint
     var health: CGFloat
     
+    var speed: CGPoint
+    
     init(position: CGPoint, health : CGFloat){
         self.position = position
         self.previousPosition = .zero
         self.health = health
+        self.speed = .zero
     }
 }

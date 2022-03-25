@@ -26,7 +26,7 @@ struct ContentView: View {
     @State private var enemiePosition = CGPoint(x: UIScreen.main.bounds.width/2, y:-10)
     
     @State var novelViews:[NewView] = []
-    @State var enemieViews:[Enemie] = []
+    @State var enemyViews:[Enemie] = []
     @State var lastTapLocation:CGPoint = .zero
 
     let taplocation = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height-UIScreen.main.bounds.height/20)

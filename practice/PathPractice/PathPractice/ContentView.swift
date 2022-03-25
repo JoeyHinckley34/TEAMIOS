@@ -12,6 +12,8 @@ struct ContentView: View {
     let start = CGPoint(x: UIScreen.main.bounds.width/2, y: .zero)
     let end = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height)
     
+    let middle = CGPoint(x: <#T##CGFloat#>, y: <#T##CGFloat#>)
+    
     var body: some View {
         ZStack{
             Path { path in
