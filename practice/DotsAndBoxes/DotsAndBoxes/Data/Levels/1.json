@@ -1,0 +1,19 @@
+{
+    "name": "Level 1",
+    "path": [
+        [50,0], [50,100]
+    ],
+    "waves": [
+        {
+            "enemyTypes": [1, 1, 1, 1, 1]
+            "cyclesBetween": [5, 5, 5, 5, 5]
+        },
+        {
+            "enemyTypes": [1, 1, 1, 1, 1]
+            "cyclesBetween": [1, 1, 1, 1, 1]
+            
+        }
+    ],
+    "startMoney": 100
+    "startLives": 10
+}
