@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 class Node: Identifiable {
+    
     var id = UUID()
     
     var position: CGPoint

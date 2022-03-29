@@ -17,6 +17,8 @@ struct ContentView: View {
     
     let timer = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()
     
+    @State private var Enemies:[NodeView] = []
+    
     var body: some View {
         
         GeometryReader { geo in
@@ -27,12 +29,12 @@ struct ContentView: View {
                 }
                 .stroke(.green, lineWidth: 40)
                 
-                
                 let NewNode = Node(position: enemiePosition, health: 10)
                 NodeView (node: NewNode)
                     .onReceive(self.timer){ _ in
                         self.moveEnemy()
                     }
+               
                 //self.view.bringSubviewToFront(NodeView)
                 
             }

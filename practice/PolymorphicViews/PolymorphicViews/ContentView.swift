@@ -74,8 +74,6 @@ class AnyEnemyView: ViewBase {
 }
 
 
-
-
 class AnyEnemy: EnemyBase {
     override func showView() -> AnyView {
         AnyView(EnemyView(enemy: EnemyBase(position: CGPoint(x: UIScreen.main.bounds.width/2, y: .zero-10), health: 10)) )
@@ -84,14 +82,11 @@ class AnyEnemy: EnemyBase {
 
 
 
-
-
 struct ContentView: View {
-    
     
     let timerPT = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()
     
-    let views: [ViewBase] = [
+    @State var views: [ViewBase] = [
         //AnyView1(),
         //AnyView2(),
         AnyEnemyView()

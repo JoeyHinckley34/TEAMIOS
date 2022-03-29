@@ -18,10 +18,6 @@ struct NewView:Identifiable{
 //    var health:CGFloat
 //}
 
-
-
-
-
 struct ContentView: View {
     
     @State private var enemiePosition = CGPoint(x: UIScreen.main.bounds.width/2, y:-10)
@@ -31,6 +27,7 @@ struct ContentView: View {
     @State var lastTapLocation:CGPoint = .zero
 
     let taplocation = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height-UIScreen.main.bounds.height/20)
+    let damagelocation = CGPoint(x: UIScreen.main.bounds.width/5, y: UIScreen.main.bounds.height-(7*UIScreen.main.bounds.height/8))
     
     let start = CGPoint(x: UIScreen.main.bounds.width/2, y: .zero)
     let end = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height)
@@ -40,6 +37,8 @@ struct ContentView: View {
     let timerT = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     
     @GestureState private var dragState = DragState.inactive
+        
+    @State private var damage:Int = 0
     
     var body: some View {
         return Group{
@@ -58,13 +57,29 @@ struct ContentView: View {
                     }
                 
                 
-                
                 Text("New Tower Location \(self.lastTapLocation.debugDescription)")
                     .position(taplocation)
+                Text("Damage \(self.damage)")
+                    .position(damagelocation)
+                //self.damage = 0
                 //loop throughh every view and add a rectangle at its location
                 ForEach(novelViews, id: \.id){ thisView in
+                    //editDamage(thisView.location, enemiePosition)
+                    //Tower itself
                     Rectangle().frame(width: 20, height: 20)
                         .offset(self.getOffset(thisView.location))
+                    //Tower Range
+                    Rectangle()
+                        .strokeBorder(abs(enemiePosition.y - thisView.location.y) < 100 && abs(enemiePosition.x - thisView.location.x) < 100 ? Color.red : Color.black, lineWidth: 2)
+                        .frame(width: 200, height: 200)
+                        .offset(self.getOffset(thisView.location))
+                    
+                    
+//                    if (abs(enemiePosition.y - thisView.location.y) < 100 && abs(enemiePosition.x - thisView.location.x) < 100 ){
+//                        damage += 1
+//                    }
+                    
+                    
                     //Loop through every other view and add path to it
 //                    ForEach(enemyViews, id: \.id) { en in
 //                        print(en.location)
@@ -91,7 +106,12 @@ struct ContentView: View {
                     
                     if (abs(startLoc.x - endLoc.x) <= 10 && abs(startLoc.y - endLoc.y) <= 10){
                         print("tap found")
-                        self.novelViews.append(NewView(location: startLoc))
+                        //Ensure not on path
+                        if (startLoc.x < 125 || startLoc.x > 195){
+                            self.novelViews.append(NewView(location: startLoc))
+                        }
+                        
+                        
                     }
                 }
                 .onChanged{value in
@@ -103,6 +123,12 @@ struct ContentView: View {
     
     }
     
+//    func editDamage(_ tower:CGPoint, _ enemy:CGPoint) {
+//        if (abs(enemy.y - tower.y) < 100 && abs(enemy.x - tower.x) < 100){
+//            self.damage += 1
+//        }
+//    }
+//
     func moveEnemy(){
         if(self.enemiePosition.y > UIScreen.main.bounds.height+10){
             self.enemiePosition.y = -10
