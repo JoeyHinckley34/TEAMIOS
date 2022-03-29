@@ -10,13 +10,14 @@ import SwiftUI
 class Enemy: Identifiable {
     var id = UUID()
     
-    var position: CGPoint
-    var previousPosition: CGPoint
+    var location: CGPoint
+    var previousLocation: CGPoint
     var health: CGFloat
     
     init(position: CGPoint, health : CGFloat){
-        self.position = position
-        self.previousPosition = .zero
+        self.location = position
+        self.previousLocation = .zero
         self.health = health
     }
+    
 }

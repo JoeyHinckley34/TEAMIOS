@@ -12,12 +12,13 @@ struct NewView:Identifiable{
     var location:CGPoint
 }
 
+//struct Enemy:Identifiable{
+//    var id = UUID()
+//    var location:CGPoint
+//    var health:CGFloat
+//}
 
-struct Enemie:Identifiable{
-    var id = UUID()
-    var location:CGPoint
-    var health:CGFloat
-}
+
 
 
 
@@ -26,7 +27,7 @@ struct ContentView: View {
     @State private var enemiePosition = CGPoint(x: UIScreen.main.bounds.width/2, y:-10)
     
     @State var novelViews:[NewView] = []
-    @State var enemyViews:[Enemie] = []
+    @State var enemyViews:[Enemy] = []
     @State var lastTapLocation:CGPoint = .zero
 
     let taplocation = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height-UIScreen.main.bounds.height/20)
@@ -34,7 +35,9 @@ struct ContentView: View {
     let start = CGPoint(x: UIScreen.main.bounds.width/2, y: .zero)
     let end = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height)
     
-    let timer = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()
+    let timerPT = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()
+    
+    let timerT = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     
     @GestureState private var dragState = DragState.inactive
     
@@ -47,11 +50,14 @@ struct ContentView: View {
                 }
                 .stroke(.green,lineWidth: 50)
                 
+                
                 let NewEnemy = Enemy(position: enemiePosition, health: 10)
                 EnemieView (enemy: NewEnemy)
-                    .onReceive(self.timer){ _ in
+                    .onReceive(self.timerPT){ _ in
                         self.moveEnemy()
                     }
+                
+                
                 
                 Text("New Tower Location \(self.lastTapLocation.debugDescription)")
                     .position(taplocation)
@@ -60,13 +66,14 @@ struct ContentView: View {
                     Rectangle().frame(width: 20, height: 20)
                         .offset(self.getOffset(thisView.location))
                     //Loop through every other view and add path to it
-                    ForEach(novelViews, id: \.id){ otherView in
-                        Path{ path in
-                            path.move(to: thisView.location)
-                            path.addLine(to: otherView.location)
-                        }
-                        .stroke(.blue,lineWidth: 3)
-                    }
+//                    ForEach(enemyViews, id: \.id) { en in
+//                        print(en.location)
+//                        Path{ path in
+//                            path.move(to: thisView.location)
+//                            path.addLine(to: en.location)
+//                        }
+//                        .stroke(.blue,lineWidth: 3)
+                    //}
                     
                     
                 }
