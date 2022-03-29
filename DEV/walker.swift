@@ -1,6 +1,6 @@
 class walker: Enemy {
     //standard speed, health
-    #define MAX_HEALTH 100
+    let MAX_HEALTH 100
     #define SPEED 3
     #define ID 0
     #define REWARD 100

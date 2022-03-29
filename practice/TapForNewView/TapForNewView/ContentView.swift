@@ -49,18 +49,18 @@ struct ContentView: View {
                 }
                 .stroke(.green,lineWidth: 50)
                 
-                
                 let NewEnemy = Enemy(position: enemiePosition, health: 10)
                 EnemieView (enemy: NewEnemy)
                     .onReceive(self.timerPT){ _ in
                         self.moveEnemy()
                     }
                 
-                
                 Text("New Tower Location \(self.lastTapLocation.debugDescription)")
                     .position(taplocation)
+                
                 Text("Damage \(self.damage)")
                     .position(damagelocation)
+                
                 //self.damage = 0
                 //loop throughh every view and add a rectangle at its location
                 ForEach(novelViews, id: \.id){ thisView in
@@ -71,31 +71,33 @@ struct ContentView: View {
                     //Tower Range
                     Rectangle()
                         .strokeBorder(abs(enemiePosition.y - thisView.location.y) < 100 && abs(enemiePosition.x - thisView.location.x) < 100 ? Color.red : Color.black, lineWidth: 2)
+                        
                         .frame(width: 200, height: 200)
                         .offset(self.getOffset(thisView.location))
-                    
-                    
+
+           
+//
 //                    if (abs(enemiePosition.y - thisView.location.y) < 100 && abs(enemiePosition.x - thisView.location.x) < 100 ){
-//                        damage += 1
+//                        self.damage += 1
 //                    }
-                    
+//
                     
                     //Loop through every other view and add path to it
-//                    ForEach(enemyViews, id: \.id) { en in
-//                        print(en.location)
+//                    ForEach(novelViews, id: \.id) { en in
+//                        //print(en.location)
 //                        Path{ path in
 //                            path.move(to: thisView.location)
 //                            path.addLine(to: en.location)
 //                        }
-//                        .stroke(.blue,lineWidth: 3)
-                    //}
-                    
+//                        .stroke(.red,lineWidth: 3)
+//                    }
+//
                     
                 }
            
             }
                 .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                .background(Color.white)
+                .background(Color.blue)
             .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .global)
                 .updating($dragState) { drag, state, transaction in
                     state = .dragging(translation: drag.translation)
@@ -130,6 +132,7 @@ struct ContentView: View {
 //    }
 //
     func moveEnemy(){
+        //off screen
         if(self.enemiePosition.y > UIScreen.main.bounds.height+10){
             self.enemiePosition.y = -10
             //Lives -= 1
