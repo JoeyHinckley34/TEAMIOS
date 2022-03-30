@@ -9,7 +9,7 @@ struct WorldObject {
 
     var enemyArray = [Enemy]()
 
-    var towerArray = [Tower]((values)
+    var towerArray = [Tower]((values))
     
     
 
