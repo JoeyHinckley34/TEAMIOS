@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct Game {
+class Game {
     var level: Level
     var mode: Int
     var wave: Int
@@ -25,5 +25,9 @@ struct Game {
         lives = level.startLives
         towers = []
         enemies = []
+    }
+    
+    func faceWave() {
+        lives -= 1
     }
 }

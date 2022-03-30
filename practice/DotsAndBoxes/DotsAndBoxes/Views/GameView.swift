@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct GameView: View {
-    @State var game: Game
+    @ObservedObject var appData: AppData
+    
+    var game: Game {
+        appData.runningGame
+    }
     
     var body: some View {
         VStack {
@@ -27,18 +31,40 @@ struct GameView: View {
                 }
                 Spacer()
             }
-            Spacer()
+            ZStack(alignment: .topLeading) {
+                Path { path in
+                    path.move(to: game.level.path[0])
+                    path.addLine(to: game.level.path[1])
+                }
+                .stroke(.green, lineWidth: 50)
+                
+                ForEach(game.enemies) { enemy in
+                    EnemyView(enemy: enemy)
+                }
+                
+                ForEach(game.towers) { tower in
+                    TowerView(tower: tower)
+                }
+                
+                Button("Next Wave") {
+                    game.lives -= 1
+                }
+                .padding()
+            }
         }
     }
+    
+//    init(appData: AppData) {
+//        self.appData = appData
+//        self.game = appData.runningGame
+//    }
 }
 
 struct GameView_Previews: PreviewProvider {
     static var previews: some View {
 
-        var level: Level = Level(name: "Level 1")
+        var appData = AppData()
         
-        var game: Game = Game(level: level, mode: 1)
-        
-        GameView(game: game)
+        GameView(appData: appData)
     }
 }
