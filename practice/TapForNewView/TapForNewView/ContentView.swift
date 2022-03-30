@@ -12,6 +12,8 @@ struct NewView:Identifiable{
     var location:CGPoint
 }
 
+
+
 //struct Enemy:Identifiable{
 //    var id = UUID()
 //    var location:CGPoint
@@ -21,60 +23,109 @@ struct NewView:Identifiable{
 struct ContentView: View {
     
     @State private var enemiePosition = CGPoint(x: UIScreen.main.bounds.width/2, y:-10)
+    @State private var enemieHealth:CGFloat = 10
+    @State private var damage:Int = 0
+    
+    @State private var Lives:Double = 20
+    @State private var Bank:Double = 100
     
     @State var novelViews:[NewView] = []
     @State var enemyViews:[Enemy] = []
+    
     @State var lastTapLocation:CGPoint = .zero
 
-    let taplocation = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height-UIScreen.main.bounds.height/20)
-    let damagelocation = CGPoint(x: UIScreen.main.bounds.width/5, y: UIScreen.main.bounds.height-(7*UIScreen.main.bounds.height/8))
+    
+    
+    private let Width:CGFloat = UIScreen.main.bounds.width
+    private let Height:CGFloat = UIScreen.main.bounds.height
+
+    var damagelocation : CGPoint{
+        get{
+            return CGPoint(x: Width/5, y: Height-(1*Height/16))
+        }
+    }
+    var healthlocation : CGPoint{
+        get {
+            return CGPoint(x: Width-Width/5, y: Height-(15*Height/16))
+        }
+    }
+    var banklocation : CGPoint {
+        get {
+            return CGPoint(x: Width/5, y: Height-(15*Height/16))
+        }
+    }
     
     let start = CGPoint(x: UIScreen.main.bounds.width/2, y: .zero)
+    let pt1 = CGPoint(x: 200, y: UIScreen.main.bounds.height/2)
     let end = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height)
     
     let timerPT = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()
-    
     let timerT = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     
     @GestureState private var dragState = DragState.inactive
-        
-    @State private var damage:Int = 0
+    
+    let pathColor = CGColor(red: 1, green: 0.85, blue: 0.24, alpha: 1)
+    let towerColor = CGColor(red: 0.20, green: 0.24, blue: 51, alpha: 1)
+    let backgroundColor = CGColor(red: 0.42, green: 0.80, blue: 0.47, alpha: 1)
     
     var body: some View {
         return Group{
             ZStack {
                 Path { path in
                     path.move(to: start)
+                    //path.addLine(to: pt1)
                     path.addLine(to: end)
                 }
-                .stroke(.green,lineWidth: 50)
+                .stroke(Color(cgColor: pathColor) ,lineWidth: 50)
                 
-                let NewEnemy = Enemy(position: enemiePosition, health: 10)
+                let NewEnemy = Enemy(position: enemiePosition, health: enemieHealth) //the ONLY enemy
                 EnemieView (enemy: NewEnemy)
                     .onReceive(self.timerPT){ _ in
                         self.moveEnemy()
+                        for thisView in novelViews{
+                            self.editDamage(enemyPosition: NewEnemy.location, towerPostition: thisView.location)
+                        }
                     }
                 
-                Text("New Tower Location \(self.lastTapLocation.debugDescription)")
-                    .position(taplocation)
+//                let NewEnemy1 = Enemy(position: enemiePosition, health: enemieHealth) //the ONLY enemy
+//                EnemieView (enemy: NewEnemy1)
+//                    .onReceive(self.timerPT){ _ in
+//                        self.moveEnemy()
+//                        for thisView in novelViews{
+//                            self.editDamage(enemyPosition: NewEnemy.location, towerPostition: thisView.location)
+//                        }
+//                    }
+
+                
+                
+                
+                //Text("New Tower Location \(self.lastTapLocation.debugDescription)")
+                //        .position(taplocation)
                 
                 Text("Damage \(self.damage)")
                     .position(damagelocation)
                 
+                Text("Lives \(self.Lives.stringWithoutTrailingZeros)")
+                    .position(healthlocation)
+                
+                Text("Bank \(self.Bank.stringWithoutTrailingZeros)")
+                    .position(banklocation)
+                
                 //self.damage = 0
-                //loop throughh every view and add a rectangle at its location
+                //loop throughh every view and add two rectangle at its location and one for the body and one for the range
                 ForEach(novelViews, id: \.id){ thisView in
                     //editDamage(thisView.location, enemiePosition)
                     //Tower itself
                     Rectangle().frame(width: 20, height: 20)
                         .offset(self.getOffset(thisView.location))
+                        .foregroundColor(Color(towerColor))
                     //Tower Range
                     Rectangle()
                         .strokeBorder(abs(enemiePosition.y - thisView.location.y) < 100 && abs(enemiePosition.x - thisView.location.x) < 100 ? Color.red : Color.black, lineWidth: 2)
-                        
                         .frame(width: 200, height: 200)
                         .offset(self.getOffset(thisView.location))
-
+                    
+                    
            
 //
 //                    if (abs(enemiePosition.y - thisView.location.y) < 100 && abs(enemiePosition.x - thisView.location.x) < 100 ){
@@ -91,13 +142,13 @@ struct ContentView: View {
 //                        }
 //                        .stroke(.red,lineWidth: 3)
 //                    }
-//
+
                     
                 }
            
             }
-                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                .background(Color.blue)
+                //.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                .background(Color(backgroundColor))
             .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .global)
                 .updating($dragState) { drag, state, transaction in
                     state = .dragging(translation: drag.translation)
@@ -109,8 +160,11 @@ struct ContentView: View {
                     if (abs(startLoc.x - endLoc.x) <= 10 && abs(startLoc.y - endLoc.y) <= 10){
                         print("tap found")
                         //Ensure not on path
-                        if (startLoc.x < 125 || startLoc.x > 195){
-                            self.novelViews.append(NewView(location: startLoc))
+                        if (startLoc.x < (UIScreen.main.bounds.width/2 - 30) || startLoc.x > (UIScreen.main.bounds.width/2 + 30)){
+                            if(Bank >= 50){
+                                self.novelViews.append(NewView(location: startLoc))
+                                Bank -= 50
+                            }
                         }
                         
                         
@@ -131,11 +185,26 @@ struct ContentView: View {
 //        }
 //    }
 //
+    
+    func editDamage(enemyPosition: CGPoint, towerPostition: CGPoint){
+        if(abs(enemiePosition.y - towerPostition.y) < 100 && abs(enemiePosition.x - towerPostition.x) < 100){
+            enemieHealth -= 1
+            damage+=1
+        }
+        if(enemieHealth < 0){
+            enemieHealth = 10
+            self.enemiePosition.y = -10
+            Bank += 30
+        }
+        
+    }
+    
     func moveEnemy(){
         //off screen
         if(self.enemiePosition.y > UIScreen.main.bounds.height+10){
             self.enemiePosition.y = -10
-            //Lives -= 1
+            Lives -= 1
+            enemieHealth = 10
         }
         withAnimation{
             self.enemiePosition.y += 30
@@ -154,6 +223,13 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
+extension Double {
+    var stringWithoutTrailingZeros: String {
+        return truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
+    }
+}
+
 
 enum DragState {
     case inactive

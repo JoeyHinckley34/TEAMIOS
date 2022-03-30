@@ -39,7 +39,7 @@ struct ContentView: View {
                 
             }
             VStack(alignment: .center){
-                Text("Enemie Position:")
+                Text("Enemy Position:")
                 Text("x:\( Double(enemiePosition.x).stringWithoutTrailingZeros) y: \( Double(enemiePosition.y).stringWithoutTrailingZeros)")
                 Text("Lives: \(Lives.stringWithoutTrailingZeros)")
             }
