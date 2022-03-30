@@ -114,10 +114,10 @@
 		90B9BB5127CDDE9E00BC653B /* DotsAndBoxes */ = {
 			isa = PBXGroup;
 			children = (
-				90B9BB5427CDDE9E00BC653B /* ContentView.swift */,
 				90AF8EB527CF30B100298466 /* Views */,
 				90B9BB7C27CDDECC00BC653B /* Componets */,
 				90B9BB5227CDDE9E00BC653B /* DotsAndBoxesApp.swift */,
+				90B9BB5427CDDE9E00BC653B /* ContentView.swift */,
 				90B9BB5627CDDEA000BC653B /* Assets.xcassets */,
 				90B9BB5827CDDEA000BC653B /* Preview Content */,
 				90AF8EBA27CF35D600298466 /* Helpers.swift */,

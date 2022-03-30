@@ -20,7 +20,8 @@
 		C3A9021B27F2430800F017B7 /* Wave.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9021A27F2430800F017B7 /* Wave.swift */; };
 		C3A9021D27F2431200F017B7 /* Tower.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9021C27F2431200F017B7 /* Tower.swift */; };
 		C3A9021F27F2432000F017B7 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9021E27F2432000F017B7 /* Enemy.swift */; };
-		C3A9022227F2550000F017B7 /* 1.json in Resources */ = {isa = PBXBuildFile; fileRef = C3A9022127F2550000F017B7 /* 1.json */; };
+		C3A9024227F3E25D00F017B7 /* TowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9024127F3E25D00F017B7 /* TowerView.swift */; };
+		C3A9024427F3E26900F017B7 /* EnemyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9024327F3E26900F017B7 /* EnemyView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,7 +39,8 @@
 		C3A9021A27F2430800F017B7 /* Wave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wave.swift; sourceTree = "<group>"; };
 		C3A9021C27F2431200F017B7 /* Tower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tower.swift; sourceTree = "<group>"; };
 		C3A9021E27F2432000F017B7 /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
-		C3A9022127F2550000F017B7 /* 1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 1.json; sourceTree = "<group>"; };
+		C3A9024127F3E25D00F017B7 /* TowerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerView.swift; sourceTree = "<group>"; };
+		C3A9024327F3E26900F017B7 /* EnemyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,7 +73,6 @@
 		C3A901FA27EE886A00F017B7 /* DotsAndBoxes */ = {
 			isa = PBXGroup;
 			children = (
-				C3A9022027F254BD00F017B7 /* Data */,
 				C3A9021227F2427500F017B7 /* Views */,
 				C3A9021127F2426400F017B7 /* Components */,
 				C3A901FB27EE886A00F017B7 /* DotsAndBoxesApp.swift */,
@@ -109,24 +110,10 @@
 				C3A9020D27F23D2300F017B7 /* LevelManageView.swift */,
 				C3A9020B27F23CB400F017B7 /* LevelSelectView.swift */,
 				C3A9020927F23AD500F017B7 /* GameView.swift */,
+				C3A9024327F3E26900F017B7 /* EnemyView.swift */,
+				C3A9024127F3E25D00F017B7 /* TowerView.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		C3A9022027F254BD00F017B7 /* Data */ = {
-			isa = PBXGroup;
-			children = (
-				C3A9022427F2551A00F017B7 /* Levels */,
-			);
-			path = Data;
-			sourceTree = "<group>";
-		};
-		C3A9022427F2551A00F017B7 /* Levels */ = {
-			isa = PBXGroup;
-			children = (
-				C3A9022127F2550000F017B7 /* 1.json */,
-			);
-			path = Levels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -189,7 +176,6 @@
 			files = (
 				C3A9020327EE886B00F017B7 /* Preview Assets.xcassets in Resources */,
 				C3A9020027EE886B00F017B7 /* Assets.xcassets in Resources */,
-				C3A9022227F2550000F017B7 /* 1.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,6 +192,8 @@
 				C3A9021F27F2432000F017B7 /* Enemy.swift in Sources */,
 				C3A9021B27F2430800F017B7 /* Wave.swift in Sources */,
 				C3A9020A27F23AD500F017B7 /* GameView.swift in Sources */,
+				C3A9024427F3E26900F017B7 /* EnemyView.swift in Sources */,
+				C3A9024227F3E25D00F017B7 /* TowerView.swift in Sources */,
 				C3A901FC27EE886A00F017B7 /* DotsAndBoxesApp.swift in Sources */,
 				C3A9021427F2429E00F017B7 /* AppData.swift in Sources */,
 				C3A9021D27F2431200F017B7 /* Tower.swift in Sources */,

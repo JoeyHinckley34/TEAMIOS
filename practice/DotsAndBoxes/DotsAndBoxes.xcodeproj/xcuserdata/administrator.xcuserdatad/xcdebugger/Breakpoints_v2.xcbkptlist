@@ -7,17 +7,49 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1D23E75E-DB68-4650-8508-8CFD2ADEA678"
+            uuid = "D7024BB4-B476-4C94-B443-EF7058778308"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DotsAndBoxes/Views/GameView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
             landmarkName = "previews"
             landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "D7024BB4-B476-4C94-B443-EF7058778308 - b0f83d11232aa873"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static DotsAndBoxes.GameView_Previews.previews.getter : some"
+                  moduleName = "DotsAndBoxes"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/administrator/Desktop/DotsAndBoxes/DotsAndBoxes/Views/GameView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "64"
+                  endingLineNumber = "64"
+                  offsetFromSymbolStart = "84">
+               </Location>
+               <Location
+                  uuid = "D7024BB4-B476-4C94-B443-EF7058778308 - b0f83d11232aa831"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static DotsAndBoxes.GameView_Previews.previews.getter : some"
+                  moduleName = "DotsAndBoxes"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/administrator/Desktop/DotsAndBoxes/DotsAndBoxes/Views/GameView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "62"
+                  endingLineNumber = "62"
+                  offsetFromSymbolStart = "236">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

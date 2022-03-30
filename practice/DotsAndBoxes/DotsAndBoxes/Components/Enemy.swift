@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct Enemy {
+struct Enemy: Identifiable {
     var id: UUID
     var path: [CGPoint]
     var position: CGPoint

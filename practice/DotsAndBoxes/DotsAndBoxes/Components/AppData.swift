@@ -8,16 +8,18 @@
 import Foundation
 import SwiftUI
 
-struct AppData {
-    var runningGame: Game
-    var savedGames: [Game]
-    var levels: [Level]
+class AppData: ObservableObject {
+    @Published var runningGame: Game
+    @Published var savedGames: [Game]
+    @Published var levels: [Level]
     
     init() {
+        var endless = Level(name: "Dots & Boxes")
         levels = [
-            Level(name: "Level 1")
+            Level(name: "Level 1"),
+            Level(name: "Level 2")
         ]
         savedGames = []
-        runningGame = Game(level: levels[0], mode: 0)
+        runningGame = Game(level: endless, mode: 0)
     }
 }

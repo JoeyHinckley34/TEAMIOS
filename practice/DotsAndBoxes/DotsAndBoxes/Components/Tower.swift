@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct Tower {
+struct Tower: Identifiable {
     var id: UUID
     var position: CGPoint
     var range: CGFloat
