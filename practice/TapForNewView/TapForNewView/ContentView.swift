@@ -22,12 +22,16 @@ struct NewView:Identifiable{
 
 struct ContentView: View {
     
-    @State private var enemiePosition = CGPoint(x: UIScreen.main.bounds.width/3, y:-10)
+    @State private var enemiePosition = CGPoint(x: UIScreen.main.bounds.width/2, y:-10)
     @State private var enemieHealth:CGFloat = 10
     @State private var damage:Int = 0
     
+    //tower types
+    var towers = ["Cannon","Blowie","Pins"]
+    @State private var towerStyle = 0
+    
     @State private var Lives:Double = 20
-    @State private var Bank:Double = 1000
+    @State private var Bank:Double = 1000000000
 //    @State private var Reset
     
     @State var novelViews:[NewView] = []
@@ -65,6 +69,9 @@ struct ContentView: View {
     let pt1 = CGPoint(x: 200, y: UIScreen.main.bounds.height/2)
     let end = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height)
     
+//    let path = { CGPoint(x: UIScreen.main.bounds.width/2, y: .zero), CGPoint(x: 200, y: UIScreen.main.bounds.height/2), CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height);
+//    }
+    
     let timerPT = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()
     let timerT = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     
@@ -74,25 +81,39 @@ struct ContentView: View {
     let towerColor = CGColor(red: 0.20, green: 0.24, blue: 51, alpha: 1)
     let backgroundColor = CGColor(red: 0.42, green: 0.80, blue: 0.47, alpha: 1)
     
+    
+    
+    
     var body: some View {
         
         
         return Group{
             ZStack {
-                Button ("Reset"){
+                Button ("Reset \(self.towerStyle)"){
                     Bank += 10
                     resetTowers()
                     
                 }
-                .padding()
-                .foregroundColor(.red)
-                .position(ResetLocation)
+                    .padding()
+                    .foregroundColor(.red)
+                    .position(ResetLocation)
+                
+                Picker(selection: $towerStyle, label:  Text("Damage \(self.damage)")){
+                    
+                    ForEach(0..<towers.count) {
+                        Text(self.towers[$0])
+                    }
+                }
+                    .padding()
+                    .pickerStyle(MenuPickerStyle())
+                    .position(damagelocation)
+                
                 Path { path in
                     path.move(to: start)
-                    path.addLine(to: pt1)
+//                    path.addLine(to: pt1)
                     path.addLine(to: end)
                 }
-                .stroke(Color(cgColor: pathColor) ,lineWidth: 50)
+                    .stroke(Color(cgColor: pathColor) ,lineWidth: 50)
                 
                 let NewEnemy = Enemy(position: enemiePosition, health: enemieHealth) //the ONLY enemy
                 EnemieView (enemy: NewEnemy)
@@ -102,24 +123,10 @@ struct ContentView: View {
                             self.editDamage(enemyPosition: NewEnemy.location, towerPostition: thisView.location)
                         }
                     }
-                
-//                let NewEnemy1 = Enemy(position: enemiePosition, health: enemieHealth) //the ONLY enemy
-//                EnemieView (enemy: NewEnemy1)
-//                    .onReceive(self.timerPT){ _ in
-//                        self.moveEnemy()
-//                        for thisView in novelViews{
-//                            self.editDamage(enemyPosition: NewEnemy.location, towerPostition: thisView.location)
-//                        }
-//                    }
 
-                
-                
-                
                 //Text("New Tower Location \(self.lastTapLocation.debugDescription)")
                 //        .position(taplocation)
                 
-                Text("Damage \(self.damage)")
-                    .position(damagelocation)
                 
                 Text("Lives \(self.Lives.stringWithoutTrailingZeros)")
                     .position(healthlocation)
@@ -131,15 +138,58 @@ struct ContentView: View {
                 //loop throughh every view and add two rectangle at its location and one for the body and one for the range
                 ForEach(novelViews, id: \.id){ thisView in
                     //editDamage(thisView.location, enemiePosition)
-                    //Tower itself
-                    Rectangle().frame(width: 20, height: 20)
+                    //cannon tower
+                    if (towerStyle == 0){
+                        //Tower itself
+                        Rectangle().frame(width: 20, height: 20)
+                            .offset(self.getOffset(thisView.location))
+                            .foregroundColor(Color(towerColor))
+                        //Tower Range
+                        Circle()
+                            .strokeBorder(abs(enemiePosition.y - thisView.location.y) < 100 && abs(enemiePosition.x - thisView.location.x) < 100 ? Color.red : Color.black, lineWidth: 2)
+                            .frame(width: 200, height: 200)
+                            .offset(self.getOffset(thisView.location))
+                    }
+                    
+                    //Blowie tower
+                    if (towerStyle == 1){
+                        Rectangle().frame(width: 10, height: 10)
+                            .offset(self.getOffset(thisView.location))
+                            .foregroundColor(Color(towerColor))
+                        //Tower Range
+                        Circle()
+                            .strokeBorder(abs(enemiePosition.y - thisView.location.y) < 100 && abs(enemiePosition.x - thisView.location.x) < 100 ? Color.red : Color.black, lineWidth: 2)
+                            .frame(width: 100, height: 100)
+                            .offset(self.getOffset(thisView.location))
+                    }
+                    
+                    //pins tower
+                    if (towerStyle == 2){
+                        Rectangle().frame(width: 10, height: 10)
                         .offset(self.getOffset(thisView.location))
                         .foregroundColor(Color(towerColor))
-                    //Tower Range
-                    Rectangle()
-                        .strokeBorder(abs(enemiePosition.y - thisView.location.y) < 100 && abs(enemiePosition.x - thisView.location.x) < 100 ? Color.red : Color.black, lineWidth: 2)
-                        .frame(width: 200, height: 200)
-                        .offset(self.getOffset(thisView.location))
+                        //Tower Range
+                        Circle()
+                            //.strokeBorder(distanceFormula(a:enemiePosition,b:thisView.location) < 100 ? Color.red : Color.black, lineWidth: 2)
+                            .frame(width: 100, height: 100)
+                            .offset(self.getOffset(thisView.location))
+                        //print(distance(a:enemiePosition,b:thisView.location))
+                    }
+                    //Rectangle()
+                    
+                    //with accurate range?
+//                    if (towerStyle == 1){
+//                        Rectangle().frame(width: 10, height: 10)
+//                            .offset(self.getOffset(thisView.location))
+//                            .foregroundColor(Color(towerColor))
+//                        //Tower Range
+//                        Circle()
+//                            //.strokeBorder(sqrt(pow(enemiePosition.y-thisView.location.y,2)+pow(enemiePosition.x-thisView.location.x, 2))) < 100 ? Color.red : Color.black, lineWidth: 2)
+//                            .frame(width: 100, height: 100)
+//                            .offset(self.getOffset(thisView.location))
+//                    }
+                    
+                    
                     
                     
            
@@ -202,6 +252,12 @@ struct ContentView: View {
 //    }
 //
     
+//    func distanceFormula(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
+//        let xDist = a.x - b.x
+//        let YDist = a.y - b.y
+//        return CGFloat(sqrt(xDist * xDist + YDist * YDist))
+//    }
+    
     func editDamage(enemyPosition: CGPoint, towerPostition: CGPoint){
         if(abs(enemiePosition.y - towerPostition.y) < 100 && abs(enemiePosition.x - towerPostition.x) < 100){
             enemieHealth -= 1
@@ -217,7 +273,7 @@ struct ContentView: View {
     
     func resetTowers(){
         self.novelViews = []
-        self.enemiePosition = CGPoint(x: UIScreen.main.bounds.width/3, y:-10)
+        self.enemiePosition = CGPoint(x: UIScreen.main.bounds.width/2, y:-10)
     }
     
     func moveEnemy(){
