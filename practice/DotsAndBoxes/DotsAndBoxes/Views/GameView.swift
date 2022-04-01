@@ -52,6 +52,7 @@ struct GameView: View {
                 .padding()
             }
         }
+        
     }
     
 //    init(appData: AppData) {

@@ -29,7 +29,7 @@ struct ContentView: View {
                 }
                 .stroke(.green, lineWidth: 40)
                 
-                let NewNode = Node(position: enemiePosition, health: 10)
+                let NewNode = Node()
                 NodeView (node: NewNode)
                     .onReceive(self.timer){ _ in
                         self.moveEnemy()

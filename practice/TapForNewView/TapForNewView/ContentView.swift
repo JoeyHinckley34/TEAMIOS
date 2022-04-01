@@ -34,9 +34,12 @@ struct ContentView: View {
     
     @State var lastTapLocation:CGPoint = .zero
 
+    var Width : CGFloat {
+        get {
+            return UIScreen.main.bounds.width
+        }
+    }
     
-    
-    private let Width:CGFloat = UIScreen.main.bounds.width
     private let Height:CGFloat = UIScreen.main.bounds.height
 
     var damagelocation : CGPoint{
@@ -96,9 +99,6 @@ struct ContentView: View {
 //                        }
 //                    }
 
-                
-                
-                
                 //Text("New Tower Location \(self.lastTapLocation.debugDescription)")
                 //        .position(taplocation)
                 
