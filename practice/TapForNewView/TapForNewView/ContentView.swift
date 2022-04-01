@@ -31,7 +31,7 @@ struct ContentView: View {
     @State private var towerStyle = 0
     
     @State private var Lives:Double = 20
-    @State private var Bank:Double = 1000000000
+    @State private var Bank:Double = 1000
 //    @State private var Reset
     
     @State var novelViews:[NewView] = []
