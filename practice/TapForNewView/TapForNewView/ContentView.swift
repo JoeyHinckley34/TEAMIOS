@@ -22,12 +22,13 @@ struct NewView:Identifiable{
 
 struct ContentView: View {
     
-    @State private var enemiePosition = CGPoint(x: UIScreen.main.bounds.width/2, y:-10)
+    @State private var enemiePosition = CGPoint(x: UIScreen.main.bounds.width/3, y:-10)
     @State private var enemieHealth:CGFloat = 10
     @State private var damage:Int = 0
     
     @State private var Lives:Double = 20
-    @State private var Bank:Double = 100
+    @State private var Bank:Double = 1000
+//    @State private var Reset
     
     @State var novelViews:[NewView] = []
     @State var enemyViews:[Enemy] = []
@@ -57,6 +58,11 @@ struct ContentView: View {
             return CGPoint(x: Width/5, y: Height-(15*Height/16))
         }
     }
+    var ResetLocation : CGPoint {
+        get {
+            return CGPoint(x: Width-Width/5, y: Height-(1*Height/16))
+        }
+    }
     
     let start = CGPoint(x: UIScreen.main.bounds.width/2, y: .zero)
     let pt1 = CGPoint(x: 200, y: UIScreen.main.bounds.height/2)
@@ -72,11 +78,21 @@ struct ContentView: View {
     let backgroundColor = CGColor(red: 0.42, green: 0.80, blue: 0.47, alpha: 1)
     
     var body: some View {
+        
+        
         return Group{
             ZStack {
+                Button ("Reset"){
+                    Bank += 10
+                    resetTowers()
+                    
+                }
+                .padding()
+                .foregroundColor(.red)
+                .position(ResetLocation)
                 Path { path in
                     path.move(to: start)
-                    //path.addLine(to: pt1)
+                    path.addLine(to: pt1)
                     path.addLine(to: end)
                 }
                 .stroke(Color(cgColor: pathColor) ,lineWidth: 50)
@@ -197,6 +213,11 @@ struct ContentView: View {
             Bank += 30
         }
         
+    }
+    
+    func resetTowers(){
+        self.novelViews = []
+        self.enemiePosition = CGPoint(x: UIScreen.main.bounds.width/3, y:-10)
     }
     
     func moveEnemy(){

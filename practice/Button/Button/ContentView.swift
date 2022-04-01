@@ -12,7 +12,7 @@ struct ContentView: View {
     
     var body: some View {
         Button ( "Tap Count: \(ClickCount)"){
-            ClickCount *= 2
+            ClickCount += 1
         }
         .padding()
     }
