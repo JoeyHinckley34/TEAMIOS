@@ -26,10 +26,19 @@ class Node: Identifiable {
     }
     
     init(){
-        self.position = CGPoint(x: UIScreen.main.bounds.width/2, y:.zero-10)
+        self.position = CGPoint(x: UIScreen.main.bounds.width/2, y:.zero+30)
         self.previousPosition = .zero
         self.health = 10
         self.speed = .zero
+    }
+    
+    func moveSelf(){
+        if(self.position.y > UIScreen.main.bounds.height+10){
+            self.position.y = .zero-10
+        }
+        withAnimation{
+            self.position.y += 30
+        }
     }
     
 }

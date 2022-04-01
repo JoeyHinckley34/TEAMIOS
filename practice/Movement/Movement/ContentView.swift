@@ -29,10 +29,12 @@ struct ContentView: View {
                 }
                 .stroke(.green, lineWidth: 40)
                 
-                let NewNode = Node()
-                NodeView (node: NewNode)
-                    .onReceive(self.timer){ _ in
-                        self.moveEnemy()
+                var NewNode = Node()
+                var ememy = NodeView (node: NewNode)
+                    .onReceive(self.timer){ e in
+                        NewNode.moveSelf()
+                        self.moveEnemy(node: NewNode)
+                       
                     }
                
                 //self.view.bringSubviewToFront(NodeView)
@@ -49,13 +51,13 @@ struct ContentView: View {
         .background(Color.blue)
     }
     
-    func moveEnemy(){
-        if(self.enemiePosition.y > UIScreen.main.bounds.height+10){
-            self.enemiePosition.y = .zero-10
+    func moveEnemy(node: Node){
+        if(node.position.y > UIScreen.main.bounds.height+10){
+            node.position.y = .zero-10
             Lives -= 1
         }
+        node.position.y += 30
         withAnimation{
-            self.enemiePosition.y += 30
         }
     }
 }
