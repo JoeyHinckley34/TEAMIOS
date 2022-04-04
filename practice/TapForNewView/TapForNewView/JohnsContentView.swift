@@ -52,20 +52,7 @@
                  }
                  .stroke(.green,lineWidth: 50)
                  
-                 
-                 //let NewEnemy = Enemy(position: enemiePosition, health: 10)
-                 
                  generateEnemies()
-                 
-                 //I dont understand this part very much, could be problematic if generates multiple enemies at diff times
-                 //if could be in spawnEnemy() in generateEnemies() could solve potential problem ^
-                 for currentEnemy in enemyViews {
-                     EnemieView (enemy: currentEnemy)
-                         .onReceive(self.timerPT){ _ in
-                             updateEnemy(currentEnemy: currentEnemy)
-                         }
-                 }
-                 
                  
                  Text("New Tower Location \(self.lastTapLocation.debugDescription)")
                      .position(taplocation)
@@ -76,29 +63,31 @@
                  //self.damage = 0
                  //loop through every view and add a rectangle at its location
                  ForEach(novelViews, id: \.id){ thisView in
-                     for currentEnemy in enemyViews {
                          //editDamage(thisView.location, enemiePosition)
-                         //Tower itself
-                         Rectangle().frame(width: 20, height: 20)
-                             .offset(self.getOffset(thisView.location))
-                         //Tower Range
-                         //IF statement assures that current tower's ("thisView") enemiesInRange is updated and filtered
-                         //if in range of current tower add currentEnemy to enemiesInRange array
+                     //Tower itself
+                     Rectangle().frame(width: 20, height: 20)
+                         .offset(self.getOffset(thisView.location))
+                     //Tower Range
+                     //Loops through all enemies on board to compute which enemies are in range of the current Tower
+                     
+                     ForEach(enemyViews, id: \.id){ currentEnemy in
+                         //if currentEnemy in range, add to towers enemiesInRange array
                          if(abs(currentEnemy.location.y - thisView.location.y) < 100 && abs(currentEnemy.location.x - thisView.location.x) < 100){
                              thisView.enemiesInRange.append(currentEnemy)
                          }else{ //else if not in range, assure currentEnemy is not in enemiesInRange array
-                             let updatedInRange = thisView.enemiesInRange.filter { $0 != currentEnemy }
+                             let updatedInRange = thisView.enemiesInRange.filter { $0.id != currentEnemy.id }
                              thisView.enemiesInRange = updatedInRange
                          }
+                     }
                          //Change border if enemies are detected
-                         Rectangle()
-                             .strokeBorder( !(thisView.enemiesInRange.isEmpty()) ? Color.red : Color.black, lineWidth: 2)
+                     Rectangle()
+                         .strokeBorder( !(thisView.enemiesInRange.isEmpty()) ? Color.red : Color.black, lineWidth: 2)
                          
-                             .frame(width: 200, height: 200)
-                             .offset(self.getOffset(thisView.location))
+                         .frame(width: 200, height: 200)
+                         .offset(self.getOffset(thisView.location))
 
                          //Deal damage to enemies in range
-                         for en in thisView.enemiesInRange{
+                         ForEach(thisView.enemiesInRange, id: \.id){ en in {
                              en.takeDamage(dmg: 1)
                          }
  //
@@ -117,7 +106,6 @@
  //                        .stroke(.red,lineWidth: 3)
  //                    }
  //
-                     }
                  }
             
              }
@@ -169,7 +157,7 @@
      
      func updateEnemy(currentEnemy: Enemy){
          if(currentEnemy.isDead){
-             enemyViews = enemyViews.filter(){$0 != currentEnemy}
+             enemyViews = enemyViews.filter(){$0.id != currentEnemy.id} //Needs fixing, maybe base find off of id?
          }else{
              currentEnemy.move()
          }
@@ -178,13 +166,14 @@
      //Loop for spawning multiple enemies
      func generateEnemies(){
          //Add timer loop??
-         spawnEnemy()
+         spawnEnemy(yOffset: 0)
+         spawnEnemy(yOffset: 10)
+         spawnEnemy(yOffset: 40)
      }
      
      //Spawns a single Enemy, appends to enemyViews array
-     func spawnEnemy(){
-         let NewEnemy = Enemy(position: start, health: 10)
-         enemyViews.append(NewEnemy)
+     func spawnEnemy(yOffset: CGFloat){
+         enemyViews.append(Enemy(position: CGPoint(x: start.x, y: start.y-yOffset), health: 10))
      }
      
      func getOffset(_ originalOffset:CGPoint) -> CGSize{
@@ -222,4 +211,5 @@
          }
      }
  }
+
 */
