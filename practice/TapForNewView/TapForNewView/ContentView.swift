@@ -81,6 +81,7 @@ struct ContentView: View {
     @GestureState private var dragState = DragState.inactive
     
     let pathColor = CGColor(red: 1, green: 0.85, blue: 0.24, alpha: 1)
+    let MenuColor = CGColor(red: 1, green: 0.89, blue: 0.74, alpha: 1)
     let towerColor = CGColor(red: 0.20, green: 0.24, blue: 51, alpha: 1)
     let backgroundColor = CGColor(red: 0.42, green: 0.80, blue: 0.47, alpha: 1)
     
@@ -92,24 +93,30 @@ struct ContentView: View {
         
         return Group{
             ZStack {
-                Button ("Reset \(self.towerStyle)"){
-                    Bank += 10
+                //Menu Path
+                Path { path in
+                    path.move(to: CGPoint(x: 0, y: Height))
+                    path.addLine(to: CGPoint(x: Width, y: Height))
+                }
+                    .stroke(Color(cgColor: MenuColor) ,lineWidth: Height/4)
+                
+                Button ("Reset \n Tower: \(self.towers[self.towerStyle])"){
                     resetTowers()
-                    
                 }
                     .padding()
                     .foregroundColor(.red)
                     .position(ResetLocation)
                 
-                Picker(selection: $towerStyle, label:  Text("Damage \(self.damage)")){
-                    
-                    ForEach(0..<towers.count) {
-                        Text(self.towers[$0])
+                Picker(selection: $towerStyle, label:  Text("")){
+                    ForEach(0 ..< towers.count, id:\.self) { i in
+                        Text(towers[i])
                     }
                 }
                     .padding()
                     .pickerStyle(MenuPickerStyle())
                     .position(damagelocation)
+    
+                    
                 
                 Path { path in
                     path.move(to: start)
@@ -117,6 +124,8 @@ struct ContentView: View {
                     path.addLine(to: end)
                 }
                     .stroke(Color(cgColor: pathColor) ,lineWidth: 50)
+                
+                
                 
                 let NewEnemy = Enemy(position: enemiePosition, health: enemieHealth) //the ONLY enemy
                 EnemieView (enemy: NewEnemy)
@@ -229,7 +238,7 @@ struct ContentView: View {
                     if (abs(startLoc.x - endLoc.x) <= 10 && abs(startLoc.y - endLoc.y) <= 10){
                         print("tap found")
                         //Ensure not on path
-                        if (startLoc.x < (UIScreen.main.bounds.width/2 - 30) || startLoc.x > (UIScreen.main.bounds.width/2 + 30)){
+                        if ((startLoc.x < (UIScreen.main.bounds.width/2 - 30) || startLoc.x > (UIScreen.main.bounds.width/2 + 30)) && ( startLoc.y < (Height-Height/8))){
                             if(Bank >= 50){
                                 self.novelViews.append(NewView(location: startLoc))
                                 Bank -= 50
