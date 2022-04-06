@@ -15,6 +15,7 @@ class Enemy: Identifiable {
     var previousLocation: CGPoint
     var health: CGFloat
     var isDead: Bool
+    var reward: Double = 30
     
     init(position: CGPoint, health : CGFloat){
         self.location = position
@@ -25,14 +26,17 @@ class Enemy: Identifiable {
     
     func move(){
         //off screen
-        if(location.y > UIScreen.main.bounds.height+10){
-            location.y = -10
-            //Lives -= 1
+        if(location.y > UIScreen.main.bounds.height-30){
+            isDead = true
+            location.y = 30
+            //print("dead")
+        }else{
+            //Move
+            withAnimation{
+                location.y += 5
+            }
         }
-        //Move
-        withAnimation{
-            location.y += 30
-        }
+        
     }
     
     func takeDamage(dmg: CGFloat){
