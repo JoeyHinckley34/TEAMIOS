@@ -197,7 +197,7 @@ struct ContentView: View {
 //    @State private var Reset
     
     @State var novelViews:[NewView] = []
-    @State var enemyViews:[EnemieView] = generateEnemies()
+    @State var enemyViews:[EnemieView] = appendNewWave(initialEV: [])
     @State var lastTapLocation:CGPoint = .zero
 
     var Width : CGFloat {
