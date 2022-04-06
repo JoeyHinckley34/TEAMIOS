@@ -33,3 +33,18 @@ func spawnEnemy(yOffset: CGFloat) -> EnemieView{
     return enemyView
     //enemyViews.append(Enemy(position: CGPoint(x: start.x, y: start.y-yOffset), health: 10))
 }
+
+
+//Updates Enemy in position and checks life to be filtered if dead
+//Returns updated/filtered enemy array
+//Ex of enemies being updated: "enemyViews = updateEnemies(enemyViewsArray: enemyViews)"
+func updateEnemies(enemyViewsArray: [EnemieView]) -> [EnemieView]{
+    var updated:[EnemieView] = []
+    for currentEnemy in enemyViewsArray {
+        if(!currentEnemy.enemy.isDead){
+            currentEnemy.enemy.move()
+            updated.append(currentEnemy)
+        }
+    }
+    return updated
+}
