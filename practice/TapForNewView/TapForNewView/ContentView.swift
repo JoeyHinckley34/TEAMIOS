@@ -4,7 +4,6 @@
 //
 //  Created by Joey Hinckley on 3/21/22.
 //
-
 import SwiftUI
 
 struct NewView:Identifiable{
@@ -19,7 +18,6 @@ struct NewView:Identifiable{
 //    var location:CGPoint
 //    var health:CGFloat
 //}
-
 /*
 struct ContentView: View {
     
@@ -28,7 +26,6 @@ struct ContentView: View {
     @State var novelViews:[NewView] = []
     @State var enemyViews:[Enemy] = []
     @State var lastTapLocation:CGPoint = .zero
-
     let taplocation = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height-UIScreen.main.bounds.height/20)
     let damagelocation = CGPoint(x: UIScreen.main.bounds.width/5, y: UIScreen.main.bounds.height-(7*UIScreen.main.bounds.height/8))
     
@@ -85,7 +82,6 @@ struct ContentView: View {
                         
                         .frame(width: 200, height: 200)
                         .offset(self.getOffset(thisView.location))
-
                         //Deal damage to enemies in range
                         ForEach(thisView.enemiesInRange, id: \.id){ en in {
                             en.takeDamage(dmg: 1)
@@ -398,7 +394,6 @@ struct ContentView: View {
 //                        }
 //                        .stroke(.red,lineWidth: 3)
 //                    }
-
                     
                 }
 //
@@ -483,17 +478,6 @@ struct ContentView: View {
 //            self.enemiePosition.y += 30
 //        }
 //    }
-    
-    func updateEnemy(currentEnemy: EnemieView){
-        if(currentEnemy.enemy.isDead){
-            enemyViews = enemyViews.filter(){$0.enemy.id != currentEnemy.enemy.id} //Needs fixing, maybe base find off of id?
-        }else{
-            currentEnemy.enemy.move()
-        }
-    }
-    
-    
-    
     
     func getOffset(_ originalOffset:CGPoint) -> CGSize{
         let xOffset = (-1 * (UIScreen.main.bounds.width/2) + originalOffset.x)
