@@ -22,9 +22,9 @@ func appendNewWave(initialEV: [EnemieView]) -> [EnemieView]{
     
     var eV:[EnemieView] = initialEV
 
+    eV.append(spawnEnemy(yOffset: -50))
     eV.append(spawnEnemy(yOffset: -100))
-    eV.append(spawnEnemy(yOffset: -10))
-    eV.append(spawnEnemy(yOffset: -40))
+    eV.append(spawnEnemy(yOffset: -150))
     
     return eV
 }
@@ -41,13 +41,10 @@ func spawnEnemy(yOffset: CGFloat) -> EnemieView{
 //Updates Enemy in position and checks life to be filtered if dead
 //Returns updated/filtered enemy array
 //Ex of enemies being updated: "enemyViews = updateEnemies(enemyViewsArray: enemyViews)"
-func updateEnemies(enemyViewsArray: [EnemieView]) -> [EnemieView]{
-    var updated:[EnemieView] = []
+func moveEnemies(enemyViewsArray: [EnemieView]) {
     for currentEnemy in enemyViewsArray {
         if(!currentEnemy.enemy.isDead){
             currentEnemy.enemy.move()
-            updated.append(currentEnemy)
         }
     }
-    return updated
 }
