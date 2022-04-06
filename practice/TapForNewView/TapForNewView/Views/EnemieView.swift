@@ -7,9 +7,11 @@
 import Foundation
 import SwiftUI
 
-struct EnemieView: View{
+struct EnemieView: Identifiable, View{
+    var id = UUID()
     var enemy: Enemy
-    var body: some View {
+    //*
+     var body: some View {
         ZStack{
             Rectangle()
                 .frame(width: enemy.health*3, height: 10)
@@ -22,5 +24,5 @@ struct EnemieView: View{
         }
         
         
-    }
+    }//*/
 }
