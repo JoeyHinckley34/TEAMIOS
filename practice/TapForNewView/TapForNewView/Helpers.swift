@@ -15,14 +15,17 @@ func distance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
 }
 
 
-//Loop for spawning multiple enemies
-func generateEnemies() -> [EnemieView]{
+//Adds more enemies to current array
+//Returns appended enemy array
+//Ex: "enemyViews = appendNewWave(initialEV: enemyViews)"
+func appendNewWave(initialEV: [EnemieView]) -> [EnemieView]{
     
-    var eV:[EnemieView] = []
+    var eV:[EnemieView] = initialEV
 
     eV.append(spawnEnemy(yOffset: -100))
     eV.append(spawnEnemy(yOffset: -10))
     eV.append(spawnEnemy(yOffset: -40))
+    
     return eV
 }
 
