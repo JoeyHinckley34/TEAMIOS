@@ -15,6 +15,8 @@ class Player: Identifiable {
     }
 }
 
+
+
 struct ContentView: View {
     
     @State private var enemiePosition = CGPoint(x: UIScreen.main.bounds.width/2, y:-10)
@@ -169,7 +171,6 @@ struct ContentView: View {
                 
                 //Text("\(enemyViews.count)")
                 
-                
                 //self.damage = 0
                 //loop throughh every view and add two rectangle at its location and one for the body and one for the range
                 
@@ -177,6 +178,8 @@ struct ContentView: View {
                 ForEach(novelViews, id: \.id) { thisView in
                     //editDamage(thisView.location, enemiePosition)
                     //cannon tower
+                    
+                    
                     if (towerStyle == 0){
                         //Tower itself
                         Rectangle().frame(width: 20, height: 20)
