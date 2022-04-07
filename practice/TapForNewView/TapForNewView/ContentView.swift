@@ -52,8 +52,10 @@ struct NewView: Identifiable {
 
 class Player: Identifiable {
     var Bank:Double
-    init(bank: Double){
+    var Lives:Double
+    init(bank: Double, lives: Double){
         Bank = bank
+        Lives = lives
     }
 }
 
@@ -68,9 +70,9 @@ struct ContentView: View {
     var towers = ["Cannon","Blowie","Pins"]
     @State private var towerStyle = 0
     
-    @State private var Lives:Double = 20
+    //@State private var Lives:Double = 20
     //@State private var Bank:Double = 1000
-    var player:Player = Player(bank: 1000)
+    var player:Player = Player(bank: 1000, lives: 20)
 //    @State private var Reset
     
     @State var novelViews:[NewView] = []
@@ -130,7 +132,7 @@ struct ContentView: View {
         //These do execute and change enemy values but do not alter array (not remove/append)
         //enemyViews = appendNewWave(initialEV: enemyViews)
         
-        moveEnemies(enemyViewsArray: enemyViews)
+        player.Lives -= moveEnemies(enemyViewsArray: enemyViews)
 
         for t in novelViews {
             t.tower.detectEnemies(enemyArray: enemyViews)
@@ -175,7 +177,7 @@ struct ContentView: View {
                 Group {
                     //*
                     //This needs to be running to have the code run continuous, not stop when wait for tap gesture
-                    let NewEnemy = Enemy(position: enemiePosition, health: enemieHealth) //the ONLY enemy
+                    let NewEnemy = Enemy(position: enemiePosition) //the ONLY enemy
                     EnemieView (enemy: NewEnemy)
                         .onReceive(self.timerPT){ _ in
                             self.moveEnemy()
@@ -187,7 +189,7 @@ struct ContentView: View {
                     ForEach(enemyViews, id: \.id) { thisEnemy in
                         if(!thisEnemy.enemy.isDead){
                             Rectangle()
-                                .frame(width: thisEnemy.enemy.health*3, height: 10)
+                                .frame(width: thisEnemy.enemy.health*1, height: 10)
                                 .foregroundColor(.green)
                                 .position( CGPoint( x:thisEnemy.enemy.location.x,y:thisEnemy.enemy.location.y - 15))
                             Circle()
@@ -203,13 +205,13 @@ struct ContentView: View {
                 //        .position(taplocation)
                 
                 
-                Text("Lives \(self.Lives.stringWithoutTrailingZeros)")
+                Text("Lives \(self.player.Lives.stringWithoutTrailingZeros)")
                     .position(healthlocation)
                 
                 Text("Bank \(self.player.Bank.stringWithoutTrailingZeros)")
                     .position(banklocation)
                 
-                Text("\(enemyViews.count)")
+                //Text("\(enemyViews.count)")
                 
                 
                 //self.damage = 0
@@ -357,7 +359,7 @@ struct ContentView: View {
         //off screen
         if(self.enemiePosition.y > UIScreen.main.bounds.height+10){
             self.enemiePosition.y = -10
-            Lives -= 1
+            player.Lives -= 1
             enemieHealth = 10
         }
         withAnimation{
