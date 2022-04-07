@@ -16,6 +16,7 @@ class Enemy: Identifiable {
     var health: CGFloat
     var reward: Double
     var speed: Double
+    var color: Color = Color(CGColor(red: 0.96, green: 0.23, blue: 0.43, alpha: 1))
     var isDead: Bool
     
     let healthMultiplier: CGFloat = 1.5
@@ -77,6 +78,7 @@ class Walker: Enemy {
         super.health = MAX_HEALTH * super.healthMultiplier
         super.reward = REWARD
         super.speed = 3 * super.speedMultiplier
+        super.color = Color(CGColor(red: 0.96, green: 0.23, blue: 0.43, alpha: 1))
      }
 
 }
@@ -95,6 +97,7 @@ class Tank: Enemy {
         super.health = MAX_HEALTH * super.healthMultiplier
         super.reward = REWARD
         super.speed = 3 * super.speedMultiplier
+        super.color = Color(CGColor(red: 0, green: 0.23, blue: 0.43, alpha: 1))
      }
 }
 
@@ -112,6 +115,7 @@ class Runner: Enemy {
         super.health = MAX_HEALTH * super.healthMultiplier
         super.reward = REWARD
         super.speed = 3 * super.speedMultiplier
+        super.color = Color(CGColor(red: 0.96, green: 1, blue: 0.43, alpha: 1))
      }
 }
 
@@ -139,6 +143,7 @@ class Runner: Enemy {
          super.health = MAX_HEALTH * super.healthMultiplier
          super.reward = REWARD
          super.speed = 3 * super.speedMultiplier
+         super.color = Color(CGColor(red: 0.60, green: 0.93, blue: 0.53, alpha: 1))
       }
 
      func getSpeed() -> Double {
