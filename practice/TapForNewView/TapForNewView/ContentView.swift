@@ -150,7 +150,7 @@ struct ContentView: View {
                                 .position( CGPoint( x:thisEnemy.enemy.location.x,y:thisEnemy.enemy.location.y - 15))
                             Circle()
                                 .frame(width: 15, height: 15)
-                                .foregroundColor(Color(CGColor(red: 0, green: 0.23, blue: 0.43, alpha: 1)))
+                                .foregroundColor(thisEnemy.enemy.color)
                                 .position(thisEnemy.enemy.location)
                         }
                     }
