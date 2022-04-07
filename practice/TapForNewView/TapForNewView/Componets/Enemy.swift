@@ -11,32 +11,48 @@ import SwiftUI
 class Enemy: Identifiable {
     var id = UUID()
     
+    var type:Int
     var location: CGPoint
-    var previousLocation: CGPoint
     var health: CGFloat
+    var reward: Double
+    var speed: Double
     var isDead: Bool
-    var reward: Double = 30
     
-    init(position: CGPoint, health : CGFloat){
-        self.location = position
-        self.previousLocation = .zero
-        self.health = health
+    let healthMultiplier: CGFloat = 1.5
+    let speedMultiplier:Double = 1.5
+    
+    init(position: CGPoint){
+        type = 0
+        location = position
+        health = 10
+        speed = 5
+        reward = 30
         isDead = false
     }
     
-    func move(){
+    init(){
+        type = 0
+        location = CGPoint(x: UIScreen.main.bounds.width/2, y:-10)
+        health = 10
+        speed = 5
+        reward = 30
+        isDead = false
+    }
+    
+    
+    
+    func move() -> Double {
         //off screen
         if(location.y > UIScreen.main.bounds.height-30){
             isDead = true
             location.y = 30
-            //print("dead")
-        }else{
-            //Move
-            withAnimation{
-                location.y += 5
-            }
+            return 1
         }
-        
+        //Else Move
+        withAnimation{
+            location.y += speed
+        }
+        return 0
     }
     
     func takeDamage(dmg: CGFloat){
@@ -47,21 +63,104 @@ class Enemy: Identifiable {
     }
 }
 
+class Walker: Enemy {
+    //standard speed, health
+    let TYPE:Int = 0
+    let MAX_HEALTH:CGFloat = 25
+    let REWARD: Double = 30
+    let SPEED: Double = 3
+    
+    override init(position: CGPoint) {
+        super.init()
+        super.type = TYPE
+        super.location = position
+        super.health = MAX_HEALTH * super.healthMultiplier
+        super.reward = REWARD
+        super.speed = 3 * super.speedMultiplier
+     }
+
+}
+
+class Tank: Enemy {
+    //slow, high health
+    let TYPE:Int = 1
+    let MAX_HEALTH:CGFloat = 50
+    let REWARD: Double = 50
+    let SPEED: Double = 2
+
+    override init(position: CGPoint) {
+        super.init()
+        super.type = TYPE
+        super.location = position
+        super.health = MAX_HEALTH * super.healthMultiplier
+        super.reward = REWARD
+        super.speed = 3 * super.speedMultiplier
+     }
+}
+
+class Runner: Enemy {
+    //high speed, low health
+    let TYPE:Int = 2
+    let MAX_HEALTH:CGFloat = 15
+    let REWARD: Double = 50
+    let SPEED: Double = 5
+
+    override init(position: CGPoint) {
+        super.init()
+        super.type = TYPE
+        super.location = position
+        super.health = MAX_HEALTH * super.healthMultiplier
+        super.reward = REWARD
+        super.speed = 3 * super.speedMultiplier
+     }
+}
 
 
 
+ class Sprinter: Enemy {
+     //alternating quite high - slightly below standard speed, slightly low health
+     let TYPE:Int = 2
+     let MAX_HEALTH:CGFloat = 35
+     let REWARD: Double = 50
+     let SPEED_1: Double = 8
+     let SPEED_2: Double = 2
+     var isFastCount: Int
+     let fastTickLimit: Int = 30
+     var isSlowCount: Int
+     let slowTickLimit: Int = 15
+     
 
-//class Enemy: Identifiable {
-//    var id = UUID()
-//
-//    var location: CGPoint
-//    var previousLocation: CGPoint
-//    var health: CGFloat
-//
-//    init(position: CGPoint, health : CGFloat){
-//        self.location = position
-//        self.previousLocation = .zero
-//        self.health = health
-//    }
-//
-//}
+     override init(position: CGPoint) {
+         isFastCount = 0
+         isSlowCount = 0
+         super.init()
+         super.type = TYPE
+         super.location = position
+         super.health = MAX_HEALTH * super.healthMultiplier
+         super.reward = REWARD
+         super.speed = 3 * super.speedMultiplier
+      }
+
+     func getSpeed() -> Double {
+         if(isFastCount < fastTickLimit){
+             isFastCount += 1
+             return SPEED_1
+         }else{
+             if(isSlowCount < slowTickLimit){
+                 isSlowCount += 1
+                 return SPEED_2
+             }else{
+                 isFastCount = 0
+                 isSlowCount = 0
+             }
+         }
+         isFastCount += 1
+         return SPEED_1
+     }
+
+     override func move() -> Double{
+         super.speed = getSpeed()
+         return super.move()
+     }
+     
+ }
