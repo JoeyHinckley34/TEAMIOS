@@ -12,9 +12,9 @@ class Node: Identifiable {
     
     var id = UUID()
     
-    var position: CGPoint
-    var previousPosition: CGPoint
-    var health: CGFloat
+    @State var position: CGPoint
+    @State var previousPosition: CGPoint
+    @State var health: CGFloat
     
     var speed: CGPoint
     
@@ -24,4 +24,21 @@ class Node: Identifiable {
         self.health = health
         self.speed = .zero
     }
+    
+    init(){
+        self.position = CGPoint(x: UIScreen.main.bounds.width/2, y:.zero+30)
+        self.previousPosition = .zero
+        self.health = 10
+        self.speed = .zero
+    }
+    
+    func moveSelf(){
+        if(self.position.y > UIScreen.main.bounds.height+10){
+            self.position.y = .zero-10
+        }
+        withAnimation{
+            self.position.y += 30
+        }
+    }
+    
 }
