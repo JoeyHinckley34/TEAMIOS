@@ -7,6 +7,7 @@
 import Foundation
 import SwiftUI
 
+//Enemy View Struct, required to display tower classes
 struct EnemieView: Identifiable, View{
     var id = UUID()
     var enemy: Enemy

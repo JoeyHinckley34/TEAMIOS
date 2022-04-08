@@ -17,6 +17,7 @@ class Tower: Identifiable{
         self.location = location
     }
     
+    //Finds enemies in range of this tower and updates enemiesInRange array
     func detectEnemies(enemyArray: [EnemieView]){
         for en in enemyArray {
             //if in range, add if not already where
@@ -32,6 +33,7 @@ class Tower: Identifiable{
         //print("\(enemiesInRange.count)")
     }
     
+    //Deals damages to all enemies in range
     func attack() -> Double {
         var rewardSum:Double = 0
         for en in enemiesInRange {

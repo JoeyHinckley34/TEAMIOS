@@ -41,7 +41,8 @@ class Enemy: Identifiable {
     }
     
     
-    
+    //Updates position
+    //Returns if reaches player
     func move() -> Double {
         //off screen
         if(location.y > UIScreen.main.bounds.height-30){
@@ -56,6 +57,7 @@ class Enemy: Identifiable {
         return 0
     }
     
+    //Recieve damage, updates health, determines if dead
     func takeDamage(dmg: CGFloat){
         health -= dmg
         if(health <= 0){
@@ -146,6 +148,8 @@ class Runner: Enemy {
          super.color = Color(CGColor(red: 0.60, green: 0.93, blue: 0.53, alpha: 1))
       }
 
+     //Determines current speed
+     //Returns calculated speed
      func getSpeed() -> Double {
          if(isFastCount < fastTickLimit){
              isFastCount += 1
@@ -162,7 +166,9 @@ class Runner: Enemy {
          isFastCount += 1
          return SPEED_1
      }
-
+     
+     //Calls getSpeed, updates speed, and moves with updated speed
+     //Returns if enemy reaches player: [1] for true, [0] for false
      override func move() -> Double{
          super.speed = getSpeed()
          return super.move()

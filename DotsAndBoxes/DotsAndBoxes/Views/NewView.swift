@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+//Tower View Struct, required to display tower classes
 struct NewView: Identifiable {
     var id = UUID()
     var tower: Tower

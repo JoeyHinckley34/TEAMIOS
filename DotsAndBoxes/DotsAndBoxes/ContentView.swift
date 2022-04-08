@@ -6,6 +6,7 @@
 //
 import SwiftUI
 
+//Mutable Player Data
 class Player: Identifiable {
     var Bank:Double
     var Lives:Double
@@ -16,7 +17,7 @@ class Player: Identifiable {
 }
 
 
-
+//Main Display and Game Calculations
 struct ContentView: View {
     
     @State private var enemiePosition = CGPoint(x: UIScreen.main.bounds.width/2, y:-10)
@@ -27,11 +28,8 @@ struct ContentView: View {
     //tower types
     var towers = ["Cannon","Blowie","Pins"]
     @State private var towerStyle = 0
-    
-    //@State private var Lives:Double = 20
-    //@State private var Bank:Double = 1000
+
     var player:Player = Player(bank: 1000, lives: 20)
-//    @State private var Reset
     
     @State var novelViews:[NewView] = []
     @State var enemyViews:[EnemieView] = appendNewWave(initialEV: [])
@@ -45,6 +43,7 @@ struct ContentView: View {
     
     private let Height:CGFloat = UIScreen.main.bounds.height
 
+    //Player info Displays
     var damagelocation : CGPoint{
         get{
             return CGPoint(x: Width/5, y: Height-(1*Height/16))
@@ -68,11 +67,7 @@ struct ContentView: View {
     
     let start = CGPoint(x: UIScreen.main.bounds.width/2, y: .zero)
     let pt1 = CGPoint(x: 200, y: UIScreen.main.bounds.height/2)
-    let end = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height)
-    
-//    let path = { CGPoint(x: UIScreen.main.bounds.width/2, y: .zero), CGPoint(x: 200, y: UIScreen.main.bounds.height/2), CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height);
-//    }
-    
+    let end = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height)   
     let timerPT = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()
     let timerT = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     
@@ -87,11 +82,10 @@ struct ContentView: View {
     
     var body: some View {
         
-        //These do execute and change enemy values but do not alter array (not remove/append)
-        //enemyViews = appendNewWave(initialEV: enemyViews)
-        
+        //Move enemies and subtract lives if get to player
         player.Lives -= moveEnemies(enemyViewsArray: enemyViews)
 
+        //towers find enemies and attack those in range
         for t in novelViews {
             t.tower.detectEnemies(enemyArray: enemyViews)
             player.Bank += t.tower.attack()
@@ -133,7 +127,6 @@ struct ContentView: View {
                 
                 //DISPLAYING ENEMIES
                 Group {
-                    //*
                     //This needs to be running to have the code run continuous, not stop when wait for tap gesture
                     let NewEnemy = Enemy(position: enemiePosition) //the ONLY enemy
                     EnemieView (enemy: NewEnemy)
@@ -142,7 +135,7 @@ struct ContentView: View {
                             for thisView in novelViews{
                                 self.editDamage(enemyPosition: NewEnemy.location, towerPostition: thisView.tower.location)
                             }
-                        }//*/
+                        }
                     
                     ForEach(enemyViews, id: \.id) { thisEnemy in
                         if(!thisEnemy.enemy.isDead){
@@ -168,11 +161,6 @@ struct ContentView: View {
                 
                 Text("Bank \(self.player.Bank.stringWithoutTrailingZeros)")
                     .position(banklocation)
-                
-                //Text("\(enemyViews.count)")
-                
-                //self.damage = 0
-                //loop throughh every view and add two rectangle at its location and one for the body and one for the range
                 
                 //DISPLAYING TOWERS
                 ForEach(novelViews, id: \.id) { thisView in
@@ -216,8 +204,8 @@ struct ContentView: View {
                             .offset(self.getOffset(thisView.tower.location))
                         //print(distance(a:enemiePosition,b:thisView.location))
                     }
-                    //Rectangle()
-                    
+                }
+                        
                     //with accurate range?
 //                    if (towerStyle == 1){
 //                        Rectangle().frame(width: 10, height: 10)
@@ -248,26 +236,20 @@ struct ContentView: View {
 //                            path.addLine(to: en.location)
 //                        }
 //                        .stroke(.red,lineWidth: 3)
-//                    }
-                    
-                }
-//
-                        
-           
+
             }.onAppear{ //This only happens once
                 enemyViews.append(spawnEnemy(yOffset: -250))
             }
-            
-                //.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                 .background(Color(backgroundColor))
             .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .global)
                 .updating($dragState) { drag, state, transaction in
                     state = .dragging(translation: drag.translation)
                 }
-                .onEnded{value in
+                .onEnded{value in //end of tap gesture
                     let startLoc = value.startLocation
                     let endLoc = value.location
                     
+                    //Buy new Tower and place down in location from end of tap gesture 
                     if (abs(startLoc.x - endLoc.x) <= 10 && abs(startLoc.y - endLoc.y) <= 10){
                         print("tap found")
                         //Ensure not on path
@@ -289,12 +271,7 @@ struct ContentView: View {
         }
     }
     
-//    func distanceFormula(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
-//        let xDist = a.x - b.x
-//        let YDist = a.y - b.y
-//        return CGFloat(sqrt(xDist * xDist + YDist * YDist))
-//    }
-    
+    //Edit local enemies healths
     func editDamage(enemyPosition: CGPoint, towerPostition: CGPoint){
         if(abs(enemiePosition.y - towerPostition.y) < 100 && abs(enemiePosition.x - towerPostition.x) < 100){
             enemieHealth -= 1
@@ -310,10 +287,10 @@ struct ContentView: View {
     
     func resetTowers(){
         self.novelViews = []
-        //Loop through all enemies
-        self.enemiePosition = CGPoint(x: UIScreen.main.bounds.width/2, y:-10)
+        //self.enemyView = []
     }
     
+    //Move local enemies
     func moveEnemy(){
         //off screen
         if(self.enemiePosition.y > UIScreen.main.bounds.height+10){
@@ -326,6 +303,7 @@ struct ContentView: View {
         }
     }
     
+    //Return offset CGSize point
     func getOffset(_ originalOffset:CGPoint) -> CGSize{
         let xOffset = (-1 * (UIScreen.main.bounds.width/2) + originalOffset.x)
         let yOffset = (-1 * (UIScreen.main.bounds.height/2) + originalOffset.y)

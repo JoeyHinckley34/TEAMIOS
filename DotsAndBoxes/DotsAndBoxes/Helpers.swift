@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+//Calcutates and returns sqrt distance
 func distance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
     let xDist = a.x - b.x
     let YDist = a.y - b.y
@@ -30,7 +31,8 @@ func appendNewWave(initialEV: [EnemieView]) -> [EnemieView]{
     return eV
 }
 
-//Spawns a single Enemy, appends to enemyViews array
+//Initializes a single Enemy
+//Returns EnemieView to be spawned and appended to enemyViews array in appendNewWave()
 func spawnEnemy(yOffset: CGFloat) -> EnemieView{
     let NewEnemy = Enemy(position: CGPoint(x:UIScreen.main.bounds.width/2, y: .zero-yOffset))
     let enemyView = EnemieView (enemy: NewEnemy)
@@ -58,9 +60,8 @@ func spawnSprinter(yOffset: CGFloat) -> EnemieView{
 }
 
 
-//Updates Enemy in position and checks life to be filtered if dead
-//Returns updated/filtered enemy array
-//Ex of enemies being updated: "enemyViews = updateEnemies(enemyViewsArray: enemyViews)"
+//Updates All Enemy in positions
+//Returns number of enemies that cross location to subtract from remaining Lives
 func moveEnemies(enemyViewsArray: [EnemieView]) -> Double{
     var lostLives:Double = 0
     for currentEnemy in enemyViewsArray {
