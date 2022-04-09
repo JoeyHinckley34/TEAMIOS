@@ -254,6 +254,7 @@ struct ContentView: View {
         player.enemyViews = appendNewWave(initialEV: [])
         player.Lives = LvlLives
         player.Bank = LvlBank
+        enemiesSpawned = 0
     }
     
     //Move local enemies
