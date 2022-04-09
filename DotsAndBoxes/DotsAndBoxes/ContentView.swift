@@ -20,7 +20,7 @@ class Player: Identifiable {
 //Main Display and Game Calculations
 struct ContentView: View {
     
-    @State private var enemiePosition = CGPoint(x: UIScreen.main.bounds.width/2, y:-10)
+    @State private var updaterPos = CGPoint(x: UIScreen.main.bounds.width/2, y:-10)
     @State private var enemieHealth:CGFloat = 10
     
     @State private var damage:Int = 0
@@ -29,7 +29,9 @@ struct ContentView: View {
     var towers = ["Cannon","Blowie","Pins"]
     @State private var towerStyle = 0
 
-    var player:Player = Player(bank: 1000, lives: 20)
+    var LvlLives:Double = 20
+    var LvlBank:Double = 200
+    var player:Player = Player(bank: 200, lives: 20)
     
     @State var novelViews:[NewView] = []
     @State var enemyViews:[EnemieView] = appendNewWave(initialEV: [])
@@ -102,8 +104,8 @@ struct ContentView: View {
                 
                
                 
-                Button ("Reset \n Tower: \(self.towers[self.towerStyle])"){
-                    resetTowers()
+                Button ("Reset: \(self.towers[self.towerStyle])"){
+                    resetLevel()
                 }
                     .padding()
                     .foregroundColor(.red)
@@ -128,13 +130,10 @@ struct ContentView: View {
                 //DISPLAYING ENEMIES
                 Group {
                     //This needs to be running to have the code run continuous, not stop when wait for tap gesture
-                    let NewEnemy = Enemy(position: enemiePosition) //the ONLY enemy
-                    EnemieView (enemy: NewEnemy)
+                    let updater = Enemy(position: updaterPos) //the ONLY enemy
+                    EnemieView (enemy: updater)
                         .onReceive(self.timerPT){ _ in
-                            self.moveEnemy()
-                            for thisView in novelViews{
-                                self.editDamage(enemyPosition: NewEnemy.location, towerPostition: thisView.tower.location)
-                            }
+                            self.updateUpdater()
                         }
                     
                     ForEach(enemyViews, id: \.id) { thisEnemy in
@@ -164,7 +163,7 @@ struct ContentView: View {
                 
                 //DISPLAYING TOWERS
                 ForEach(novelViews, id: \.id) { thisView in
-                    //editDamage(thisView.location, enemiePosition)
+                    //editDamage(thisView.location, updaterPos)
                     //cannon tower
                     
                     
@@ -175,7 +174,7 @@ struct ContentView: View {
                             .foregroundColor(Color(towerColor))
                         //Tower Range
                         Circle()
-                            .strokeBorder((abs(enemiePosition.y - thisView.tower.location.y) < 100 && abs(enemiePosition.x - thisView.tower.location.x) < 100) || !thisView.tower.enemiesInRange.isEmpty ? Color.red : Color.black, lineWidth: 2)
+                            .strokeBorder(!thisView.tower.enemiesInRange.isEmpty ? Color.red : Color.black, lineWidth: 2)
                             .frame(width: 200, height: 200)
                             .offset(self.getOffset(thisView.tower.location))
                     }
@@ -187,7 +186,7 @@ struct ContentView: View {
                             .foregroundColor(Color(towerColor))
                         //Tower Range
                         Circle()
-                            .strokeBorder(abs(enemiePosition.y - thisView.tower.location.y) < 100 && abs(enemiePosition.x - thisView.tower.location.x) < 100 ? Color.red : Color.black, lineWidth: 2)
+                            .strokeBorder(!thisView.tower.enemiesInRange.isEmpty ? Color.red : Color.black, lineWidth: 2)
                             .frame(width: 100, height: 100)
                             .offset(self.getOffset(thisView.tower.location))
                     }
@@ -199,10 +198,10 @@ struct ContentView: View {
                         .foregroundColor(Color(towerColor))
                         //Tower Range
                         Circle()
-                            //.strokeBorder(distanceFormula(a:enemiePosition,b:thisView.location) < 100 ? Color.red : Color.black, lineWidth: 2)
+                            .strokeBorder(!thisView.tower.enemiesInRange.isEmpty ? Color.red : Color.black, lineWidth: 2)
                             .frame(width: 100, height: 100)
                             .offset(self.getOffset(thisView.tower.location))
-                        //print(distance(a:enemiePosition,b:thisView.location))
+                        //print(distance(a:updaterPos,b:thisView.location))
                     }
                 }
                         
@@ -213,7 +212,7 @@ struct ContentView: View {
 //                            .foregroundColor(Color(towerColor))
 //                        //Tower Range
 //                        Circle()
-//                            //.strokeBorder(sqrt(pow(enemiePosition.y-thisView.location.y,2)+pow(enemiePosition.x-thisView.location.x, 2))) < 100 ? Color.red : Color.black, lineWidth: 2)
+//                            //.strokeBorder(sqrt(pow(updaterPos.y-thisView.location.y,2)+pow(updaterPos.x-thisView.location.x, 2))) < 100 ? Color.red : Color.black, lineWidth: 2)
 //                            .frame(width: 100, height: 100)
 //                            .offset(self.getOffset(thisView.location))
 //                    }
@@ -223,7 +222,7 @@ struct ContentView: View {
                     
            
 //
-//                    if (abs(enemiePosition.y - thisView.location.y) < 100 && abs(enemiePosition.x - thisView.location.x) < 100 ){
+//                    if (abs(updaterPos.y - thisView.location.y) < 100 && abs(updaterPos.x - thisView.location.x) < 100 ){
 //                        self.damage += 1
 //                    }
 //
@@ -271,35 +270,25 @@ struct ContentView: View {
         }
     }
     
-    //Edit local enemies healths
-    func editDamage(enemyPosition: CGPoint, towerPostition: CGPoint){
-        if(abs(enemiePosition.y - towerPostition.y) < 100 && abs(enemiePosition.x - towerPostition.x) < 100){
-            enemieHealth -= 1
-            damage+=1
-        }
-        if(enemieHealth < 0){
-            enemieHealth = 10
-            self.enemiePosition.y = -10
-            player.Bank += 30
-        }
-        
-    }
-    
-    func resetTowers(){
+    //Reset Level: towers, enemies, lives, and bank
+    func resetLevel(){
         self.novelViews = []
-        //self.enemyView = []
+        enemyViews = []
+        enemyViews = appendNewWave(initialEV: [])
+        player.Lives = LvlLives
+        player.Bank = LvlBank
     }
     
     //Move local enemies
-    func moveEnemy(){
+    func updateUpdater(){
         //off screen
-        if(self.enemiePosition.y > UIScreen.main.bounds.height+10){
-            self.enemiePosition.y = -10
-            player.Lives -= 1
-            enemieHealth = 10
+        if(self.updaterPos.x < UIScreen.main.bounds.width+40){
+            withAnimation{
+                self.updaterPos.x += 1
+            }
         }
-        withAnimation{
-            self.enemiePosition.y += 30
+        else{
+            updaterPos.x = UIScreen.main.bounds.width/2
         }
     }
     
