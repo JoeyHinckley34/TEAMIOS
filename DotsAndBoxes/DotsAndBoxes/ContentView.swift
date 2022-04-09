@@ -10,6 +10,9 @@ import SwiftUI
 class Player: Identifiable {
     var Bank:Double
     var Lives:Double
+    //var enemiesSpawned: CGFloat = 0
+    var novelViews:[NewView] = []
+    var enemyViews:[EnemieView] = appendNewWave(initialEV: [])
     init(bank: Double, lives: Double){
         Bank = bank
         Lives = lives
@@ -29,12 +32,12 @@ struct ContentView: View {
     var towers = ["Cannon","Blowie","Pins"]
     @State private var towerStyle = 0
 
-    var LvlLives:Double = 20
+    var LvlLives:Double = 5
     var LvlBank:Double = 200
-    var player:Player = Player(bank: 200, lives: 20)
+    var player:Player = Player(bank: 200, lives: 5)
     
-    @State var novelViews:[NewView] = []
-    @State var enemyViews:[EnemieView] = appendNewWave(initialEV: [])
+    //@State var novelViews:[NewView] = []
+    //@State var enemyViews:[EnemieView] = appendNewWave(initialEV: [])
     @State var lastTapLocation:CGPoint = .zero
 
     var Width : CGFloat {
@@ -85,11 +88,14 @@ struct ContentView: View {
     var body: some View {
         
         //Move enemies and subtract lives if get to player
-        player.Lives -= moveEnemies(enemyViewsArray: enemyViews)
+        player.Lives -= moveEnemies(enemyViewsArray: player.enemyViews)
 
+        if(player.Lives <= 0){
+            resetLevel()
+        }
         //towers find enemies and attack those in range
-        for t in novelViews {
-            t.tower.detectEnemies(enemyArray: enemyViews)
+        for t in player.novelViews {
+            t.tower.detectEnemies(enemyArray: player.enemyViews)
             player.Bank += t.tower.attack()
         }
     
@@ -136,7 +142,7 @@ struct ContentView: View {
                             self.updateUpdater()
                         }
                     
-                    ForEach(enemyViews, id: \.id) { thisEnemy in
+                    ForEach(player.enemyViews, id: \.id) { thisEnemy in
                         if(!thisEnemy.enemy.isDead){
                             Rectangle()
                                 .frame(width: thisEnemy.enemy.health*1, height: 10)
@@ -162,7 +168,7 @@ struct ContentView: View {
                     .position(banklocation)
                 
                 //DISPLAYING TOWERS
-                ForEach(novelViews, id: \.id) { thisView in
+                ForEach(player.novelViews, id: \.id) { thisView in
                     //editDamage(thisView.location, updaterPos)
                     //cannon tower
                     
@@ -204,40 +210,9 @@ struct ContentView: View {
                         //print(distance(a:updaterPos,b:thisView.location))
                     }
                 }
-                        
-                    //with accurate range?
-//                    if (towerStyle == 1){
-//                        Rectangle().frame(width: 10, height: 10)
-//                            .offset(self.getOffset(thisView.location))
-//                            .foregroundColor(Color(towerColor))
-//                        //Tower Range
-//                        Circle()
-//                            //.strokeBorder(sqrt(pow(updaterPos.y-thisView.location.y,2)+pow(updaterPos.x-thisView.location.x, 2))) < 100 ? Color.red : Color.black, lineWidth: 2)
-//                            .frame(width: 100, height: 100)
-//                            .offset(self.getOffset(thisView.location))
-//                    }
-                    
-                    
-                    
-                    
-           
-//
-//                    if (abs(updaterPos.y - thisView.location.y) < 100 && abs(updaterPos.x - thisView.location.x) < 100 ){
-//                        self.damage += 1
-//                    }
-//
-                    
-                    //Loop through every other view and add path to it
-//                    ForEach(novelViews, id: \.id) { en in
-//                        //print(en.location)
-//                        Path{ path in
-//                            path.move(to: thisView.location)
-//                            path.addLine(to: en.location)
-//                        }
-//                        .stroke(.red,lineWidth: 3)
 
             }.onAppear{ //This only happens once
-                enemyViews.append(spawnEnemy(yOffset: -250))
+                player.enemyViews.append(spawnEnemy(yOffset: -250))
             }
                 .background(Color(backgroundColor))
             .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .global)
@@ -254,7 +229,7 @@ struct ContentView: View {
                         //Ensure not on path
                         if ((startLoc.x < (UIScreen.main.bounds.width/2 - 30) || startLoc.x > (UIScreen.main.bounds.width/2 + 30)) && ( startLoc.y < (Height-Height/8))){
                             if(player.Bank >= 50){
-                                self.novelViews.append(NewView(tower: Tower(location: startLoc)))
+                                player.novelViews.append(NewView(tower: Tower(location: startLoc)))
                                 player.Bank -= 50
                             }
                         }
@@ -268,13 +243,18 @@ struct ContentView: View {
                 })
             .ignoresSafeArea()
         }
+        .onReceive (self.timerT){ _ in
+              withAnimation {
+                  player.enemyViews.append(spawnRandom(yOffset: 30))
+              }
+        }
     }
     
     //Reset Level: towers, enemies, lives, and bank
     func resetLevel(){
-        self.novelViews = []
-        enemyViews = []
-        enemyViews = appendNewWave(initialEV: [])
+        player.novelViews = []
+        player.enemyViews = []
+        player.enemyViews = appendNewWave(initialEV: [])
         player.Lives = LvlLives
         player.Bank = LvlBank
     }
