@@ -210,8 +210,6 @@ struct ContentView: View {
                     }
                 }
 
-            }.onAppear{ //This only happens once
-                player.enemyViews.append(spawnEnemy(yOffset: -250))
             }
                 .background(Color(backgroundColor))
             .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .global)
