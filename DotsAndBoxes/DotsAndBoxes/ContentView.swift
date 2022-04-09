@@ -10,7 +10,6 @@ import SwiftUI
 class Player: Identifiable {
     var Bank:Double
     var Lives:Double
-    //var enemiesSpawned: CGFloat = 0
     var novelViews:[NewView] = []
     var enemyViews:[EnemieView] = appendNewWave(initialEV: [])
     init(bank: Double, lives: Double){
