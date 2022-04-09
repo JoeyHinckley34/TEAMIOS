@@ -20,7 +20,7 @@ class Enemy: Identifiable {
     var isDead: Bool
     
     let healthMultiplier: CGFloat = 1.5
-    let speedMultiplier:Double = 1.5
+    let speedMultiplier:Double = 4
     
     init(position: CGPoint){
         type = 0
