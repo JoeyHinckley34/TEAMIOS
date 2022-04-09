@@ -21,7 +21,7 @@ class Tower: Identifiable{
     func detectEnemies(enemyArray: [EnemieView]){
         for en in enemyArray {
             //if in range, add if not already where
-            if(abs(en.enemy.location.y - location.y) < 100 && abs(en.enemy.location.x - location.x) < 100){
+            if(!en.enemy.isDead && abs(en.enemy.location.y - location.y) < 100 && abs(en.enemy.location.x - location.x) < 100){
                 if(!enemiesInRange.contains(where: { $0.id == en.id })){
                     enemiesInRange.append(en)
                 }
