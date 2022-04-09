@@ -24,9 +24,9 @@ func appendNewWave(initialEV: [EnemieView]) -> [EnemieView]{
     var eV:[EnemieView] = initialEV
     
     eV.append(spawnRunner(yOffset: 0))
-    eV.append(spawnSprinter(yOffset: -50))
-    eV.append(spawnWalker(yOffset: -100))
-    eV.append(spawnTank(yOffset: -150))
+    eV.append(spawnSprinter(yOffset: 50))
+    eV.append(spawnWalker(yOffset: 100))
+    eV.append(spawnTank(yOffset: 150))
     
     return eV
 }
