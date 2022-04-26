@@ -28,7 +28,7 @@ struct ContentView: View {
     @State private var damage:Int = 0
     
     //tower types
-    var towers = ["Cannon","Blowie","Pins"]
+    var towers = ["Default","FlameThrower","Sniper"]
     @State private var towerStyle = 0
 
     var LvlLives:Double = 5
@@ -127,7 +127,7 @@ struct ContentView: View {
     
                 Path { path in
                     path.move(to: start)
-//                    path.addLine(to: pt1)
+                    //path.addLine(to: pt1)
                     path.addLine(to: end)
                 }
                     .stroke(Color(cgColor: pathColor) ,lineWidth: 50)
@@ -156,10 +156,7 @@ struct ContentView: View {
                 }
                 
 
-                //Text("New Tower Location \(self.lastTapLocation.debugDescription)")
-                //        .position(taplocation)
-                
-                
+                //DISPLAY Player Values (lives, bank)
                 Text("Lives \(self.player.Lives.stringWithoutTrailingZeros)")
                     .position(healthlocation)
                 
@@ -168,46 +165,30 @@ struct ContentView: View {
                 
                 //DISPLAYING TOWERS
                 ForEach(player.novelViews, id: \.id) { thisView in
-                    //editDamage(thisView.location, updaterPos)
-                    //cannon tower
+                    let thisTower: Tower = thisView.tower
+                    let reloadBoxWidth: CGFloat = 20
+                    let reloadPercent: CGFloat = thisTower.currentTick / thisTower.shootTick
+                    let reloadProgressWidth: CGFloat = reloadBoxWidth * reloadPercent
                     
-                    
-                    if (towerStyle == 0){
-                        //Tower itself
-                        Rectangle().frame(width: 20, height: 20)
-                            .offset(self.getOffset(thisView.tower.location))
-                            .foregroundColor(Color(towerColor))
+                    //All Displays are the same, do i want to change the hard-coded values to justify this or remove the switch statement and have ranges not hard-coded???
+                    //Default Tower
+                        Rectangle() //Reload Display Back
+                            .frame(width: reloadBoxWidth, height: 10)
+                            .foregroundColor(.red)
+                            .position( CGPoint( x:thisTower.location.x,y:thisTower.location.y - 15))
+                        Rectangle() //Reload Display Front
+                            .frame(width: reloadProgressWidth, height: 10)
+                            .foregroundColor(.green)
+                            .position( CGPoint( x:thisTower.location.x-(reloadBoxWidth)/2+(reloadProgressWidth)/2 , y:thisTower.location.y - 15) )
+                        Rectangle().frame(width: 10, height: 10) //Tower Display
+                            .offset(self.getOffset(thisTower.location))
+                            .foregroundColor(thisTower.color)
+                            .frame(width: 15, height: 15)
                         //Tower Range
                         Circle()
-                            .strokeBorder(!thisView.tower.enemiesInRange.isEmpty ? Color.red : Color.black, lineWidth: 2)
-                            .frame(width: 200, height: 200)
-                            .offset(self.getOffset(thisView.tower.location))
-                    }
-                    
-                    //Blowie tower
-                    if (towerStyle == 1){
-                        Rectangle().frame(width: 10, height: 10)
-                            .offset(self.getOffset(thisView.tower.location))
-                            .foregroundColor(Color(towerColor))
-                        //Tower Range
-                        Circle()
-                            .strokeBorder(!thisView.tower.enemiesInRange.isEmpty ? Color.red : Color.black, lineWidth: 2)
-                            .frame(width: 100, height: 100)
-                            .offset(self.getOffset(thisView.tower.location))
-                    }
-                    
-                    //pins tower
-                    if (towerStyle == 2){
-                        Rectangle().frame(width: 10, height: 10)
-                            .offset(self.getOffset(thisView.tower.location))
-                        .foregroundColor(Color(towerColor))
-                        //Tower Range
-                        Circle()
-                            .strokeBorder(!thisView.tower.enemiesInRange.isEmpty ? Color.red : Color.black, lineWidth: 2)
-                            .frame(width: 100, height: 100)
-                            .offset(self.getOffset(thisView.tower.location))
-                        //print(distance(a:updaterPos,b:thisView.location))
-                    }
+                            .strokeBorder(!thisTower.enemiesInRange.isEmpty ? Color.red : Color.black, lineWidth: 2)
+                            .frame(width: thisTower.range*2, height: thisTower.range*2)
+                            .offset(self.getOffset(thisTower.location))
                 }
 
             }
@@ -225,13 +206,22 @@ struct ContentView: View {
                         print("tap found")
                         //Ensure not on path
                         if ((startLoc.x < (UIScreen.main.bounds.width/2 - 30) || startLoc.x > (UIScreen.main.bounds.width/2 + 30)) && ( startLoc.y < (Height-Height/8))){
-                            if(player.Bank >= 50){
-                                player.novelViews.append(NewView(tower: Tower(location: startLoc)))
-                                player.Bank -= 50
+                            let newTower: NewView
+                            switch towerStyle {
+                            case 1:
+                                newTower = NewView(tower: FlameThrower(location: startLoc))
+                            case 2:
+                                newTower = NewView(tower: Sniper(location: startLoc))
+                            default:
+                                newTower = NewView(tower: Tower(location: startLoc))
+                            }
+                            if(player.Bank >= newTower.tower.cost){
+                                player.novelViews.append(newTower)
+                                player.Bank -= newTower.tower.cost
                             }
                         }
                         
-                        
+        
                     }
                 }
                 .onChanged{value in
