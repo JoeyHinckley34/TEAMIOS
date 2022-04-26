@@ -170,8 +170,7 @@ struct ContentView: View {
                     let reloadPercent: CGFloat = thisTower.currentTick / thisTower.shootTick
                     let reloadProgressWidth: CGFloat = reloadBoxWidth * reloadPercent
                     
-                    //All Displays are the same, do i want to change the hard-coded values to justify this or remove the switch statement and have ranges not hard-coded???
-                    //Default Tower
+                    //Display current Tower, aka thisTower (aka thisView.tower)
                         Rectangle() //Reload Display Back
                             .frame(width: reloadBoxWidth, height: 10)
                             .foregroundColor(.red)
@@ -184,8 +183,7 @@ struct ContentView: View {
                             .offset(self.getOffset(thisTower.location))
                             .foregroundColor(thisTower.color)
                             .frame(width: 15, height: 15)
-                        //Tower Range
-                        Circle()
+                        Circle() //Tower Range
                             .strokeBorder(!thisTower.enemiesInRange.isEmpty ? Color.red : Color.black, lineWidth: 2)
                             .frame(width: thisTower.range*2, height: thisTower.range*2)
                             .offset(self.getOffset(thisTower.location))
@@ -200,12 +198,21 @@ struct ContentView: View {
                 .onEnded{value in //end of tap gesture
                     let startLoc = value.startLocation
                     let endLoc = value.location
-                    
+                
+                    var tooClose: Bool
+                    tooClose = false
+                    /* Unsolved SWIFT ERROR!!!!!!
+                     ForEach(player.novelViews, id: \.id) { t in
+                        var tower:Tower = t.tower
+                        if((startLoc.x < (t.location.x - 30) || startLoc.x > (t.location.x + 30)) && (startLoc.y < (t.location.y - 30) || startLoc.y > (t.location.y + 30))){
+                            tooClose = true
+                        }
+                    }*/
                     //Buy new Tower and place down in location from end of tap gesture 
                     if (abs(startLoc.x - endLoc.x) <= 10 && abs(startLoc.y - endLoc.y) <= 10){
                         print("tap found")
-                        //Ensure not on path
-                        if ((startLoc.x < (UIScreen.main.bounds.width/2 - 30) || startLoc.x > (UIScreen.main.bounds.width/2 + 30)) && ( startLoc.y < (Height-Height/8))){
+                        //Ensure not on path or in a tower range
+                        if (!tooClose && (startLoc.x < (UIScreen.main.bounds.width/2 - 30) || startLoc.x > (UIScreen.main.bounds.width/2 + 30)) && ( startLoc.y < (Height-Height/8))){
                             let newTower: NewView
                             switch towerStyle {
                             case 1:
