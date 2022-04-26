@@ -135,6 +135,7 @@ class Runner: Enemy {
      var isSlowCount: Int
      let slowTickLimit: Int = 15
      
+     
 
      override init(position: CGPoint) {
          isFastCount = 0
