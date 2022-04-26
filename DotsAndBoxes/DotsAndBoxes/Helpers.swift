@@ -9,9 +9,9 @@ import SwiftUI
 var enemiesSpawned: CGFloat = 0
 
 //Calcutates and returns sqrt distance
-func distance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
-    let xDist = a.x - b.x
-    let YDist = a.y - b.y
+func distance(from: CGPoint, to: CGPoint) -> CGFloat {
+    let xDist = from.x - to.x
+    let YDist = from.y - to.y
     return CGFloat(sqrt(xDist * xDist + YDist * YDist))
 }
 
@@ -27,6 +27,19 @@ func appendNewWave(initialEV: [EnemieView]) -> [EnemieView]{
     eV.append(spawnSprinter(yOffset: 50))
     eV.append(spawnWalker(yOffset: 100))
     eV.append(spawnTank(yOffset: 150))
+    
+    return eV
+}
+
+func appendRandomAmount(initialEV: [EnemieView]) -> [EnemieView]{
+    var eV:[EnemieView] = initialEV
+
+    let rdm:Int = Int.random(in: 1..<4)
+    var yOffset: CGFloat = 0
+    for _ in 1...rdm {
+        eV.append(spawnRandom(yOffset: yOffset))
+        yOffset += CGFloat.random(in: 30..<60)
+    }
     
     return eV
 }
@@ -72,19 +85,19 @@ func spawnRandom(yOffset: CGFloat) -> EnemieView{
     let rdm:Int = Int.random(in: 1..<4)
     switch rdm {
     case 1:
-        return spawnWalker(yOffset: 0)
+        return spawnWalker(yOffset: yOffset)
 
     case 2:
-       return spawnTank(yOffset: 0)
+       return spawnTank(yOffset: yOffset)
 
     case 3:
-        return spawnRunner(yOffset: 0)
+        return spawnRunner(yOffset: yOffset)
 
     case 4:
-        return spawnSprinter(yOffset: 0)
+        return spawnSprinter(yOffset: yOffset)
         
     default:
-        return spawnEnemy(yOffset: 0)
+        return spawnEnemy(yOffset: yOffset)
     }
 }
 
