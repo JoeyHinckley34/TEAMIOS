@@ -21,7 +21,7 @@ class Player: Identifiable {
 // Main Display and Game Calculations
 struct ContentView: View {
 
-    @State private var updaterPos = CGPoint(x: UIScreen.main.bounds.width/2, y: -10)
+    @State private var updaterPos = CGPoint(x: UIScreen.main.bounds.width/2, y: -100)
     @State private var enemieHealth: CGFloat = 10
 
     @State private var damage: Int = 0
@@ -45,17 +45,17 @@ struct ContentView: View {
     private let Height: CGFloat = UIScreen.main.bounds.height
 
     // Player info Displays
-    var damagelocation: CGPoint {
-        return CGPoint(x: Width/5, y: Height-(1*Height/16))
+    var towerSelectLocation: CGPoint {
+        return CGPoint(x: Width/5, y: Height-(1*Height/16)-40)
     }
     var healthlocation: CGPoint {
-        return CGPoint(x: Width-Width/5, y: Height-(15*Height/16))
+        return CGPoint(x: Width-Width/5, y: Height-(15*Height/16)-40)
     }
     var banklocation: CGPoint {
-        return CGPoint(x: Width/5, y: Height-(15*Height/16))
+        return CGPoint(x: Width/5, y: Height-(15*Height/16)-40)
     }
     var ResetLocation: CGPoint {
-        return CGPoint(x: Width-Width/5, y: Height-(1*Height/16))
+        return CGPoint(x: Width-Width/5, y: Height-(1*Height/16)-40)
     }
 
     let start = CGPoint(x: UIScreen.main.bounds.width/2, y: .zero)
@@ -83,7 +83,7 @@ struct ContentView: View {
             t.tower.detectEnemies(enemyArray: player.enemyViews)
             player.Bank += t.tower.attack()
         }
-
+        
         return Group {
             ZStack {
                 // Menu Path
@@ -107,7 +107,7 @@ struct ContentView: View {
                 }
                     .padding()
                     .pickerStyle(MenuPickerStyle())
-                    .position(damagelocation)
+                    .position(towerSelectLocation)
 
                 Path { path in
                     path.move(to: start)
@@ -242,7 +242,7 @@ struct ContentView: View {
     // Move local enemies
     func updateUpdater() {
         // off screen
-        if self.updaterPos.x < UIScreen.main.bounds.width+40 {
+        if self.updaterPos.x < UIScreen.main.bounds.width+20 {
             withAnimation {
                 self.updaterPos.x += 1
             }
