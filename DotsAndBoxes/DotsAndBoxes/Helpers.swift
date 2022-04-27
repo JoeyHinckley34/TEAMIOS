@@ -82,7 +82,7 @@ func spawnSprinter(yOffset: CGFloat) -> EnemieView{
     return enemyView
 }
 func spawnRandom(yOffset: CGFloat) -> EnemieView{
-    let rdm:Int = Int.random(in: 1..<4)
+    let rdm:Int = Int.random(in: 1..<5)
     switch rdm {
     case 1:
         return spawnWalker(yOffset: yOffset)
