@@ -12,10 +12,18 @@ class Player: Identifiable {
     var Lives: Double
     var towerViews: [TowerView] = []
     var enemyViews: [EnemieView] = appendNewWave(initialEV: [])
+    var firstRun: Bool
     init(bank: Double, lives: Double) {
         Bank = bank
         Lives = lives
+        firstRun = true
     }
+}
+
+class LevelInfo{
+    var Bank: [Double] = [200, 300, 500, 1000]
+    var Lives: [Double] = [5, 7, 10, 1]
+    init(){}
 }
 
 // Main Display and Game Calculations
@@ -30,8 +38,8 @@ struct ContentView: View {
     var towers = ["Default", "FlameThrower", "Sniper"]
     @State private var towerStyle = 0
 
-    var LvlLives: Double = 5
-    var LvlBank: Double = 200
+    var lvlInfo: LevelInfo = LevelInfo()
+    var lvl: Int = 0
     var player: Player = Player(bank: 200, lives: 5)
 
     // @State var towerViews.:[TowerView] = []
@@ -54,6 +62,9 @@ struct ContentView: View {
     var banklocation: CGPoint {
         return CGPoint(x: Width/5, y: Height-(15*Height/16)-40)
     }
+    var lvlLocation: CGPoint {
+        return CGPoint(x: Width/2, y: 10)
+    }
     var ResetLocation: CGPoint {
         return CGPoint(x: Width-Width/5, y: Height-(1*Height/16)-40)
     }
@@ -72,6 +83,8 @@ struct ContentView: View {
     let backgroundColor = CGColor(red: 0.42, green: 0.80, blue: 0.47, alpha: 1)
 
     var body: some View {
+        checkValues()
+        
         // Move enemies and subtract lives if get to player
         player.Lives -= moveEnemies(enemyViewsArray: player.enemyViews)
 
@@ -139,12 +152,15 @@ struct ContentView: View {
                     }
                 }
 
-                // DISPLAY Player Values (lives, bank)
+                // DISPLAY Player Values (lives, bank) and Level
                 Text("Lives \(self.player.Lives.stringWithoutTrailingZeros)")
                     .position(healthlocation)
 
                 Text("Bank \(self.player.Bank.stringWithoutTrailingZeros)")
                     .position(banklocation)
+                
+                Text("Level \(self.lvl)")
+                    .position(lvlLocation)
 
                 // DISPLAYING TOWERS
                 ForEach(player.towerViews, id: \.id) { thisView in
@@ -228,14 +244,21 @@ struct ContentView: View {
               }
         }
     }
+    
+    func checkValues(){
+        if(player.firstRun){
+            player.firstRun = false
+            resetLevel()
+        }
+    }
 
     // Reset Level: towers, enemies, lives, and bank
     func resetLevel() {
         player.towerViews = []
         player.enemyViews = []
         player.enemyViews = appendNewWave(initialEV: [])
-        player.Lives = LvlLives
-        player.Bank = LvlBank
+        player.Bank =  lvlInfo.Bank[lvl]
+        player.Lives = lvlInfo.Lives[lvl]
         enemiesSpawned = 0
     }
 
@@ -260,8 +283,10 @@ struct ContentView: View {
 }
 
 struct ContentView_Previews: PreviewProvider {
+    static let levelPreview = 0
+    
     static var previews: some View {
-        ContentView()
+        ContentView(lvl: levelPreview)
     }
 }
 
