@@ -14,7 +14,7 @@ class Tower: Identifiable{
     var id = UUID()
     var damage: CGFloat = 1
     var shootTick: CGFloat = 2
-    var currentTick: CGFloat = 0
+    var currentTick: CGFloat = 1000000
     var cost: Double = 50
     var color: Color = Color(CGColor(red: 0.96, green: 0.23, blue: 0.43, alpha: 1))
     var range: CGFloat = 100
