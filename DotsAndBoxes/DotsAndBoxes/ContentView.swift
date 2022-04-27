@@ -109,7 +109,7 @@ struct ContentView: View {
                 
                
                 
-                Button ("Reset: \(self.towers[self.towerStyle])"){
+                Button ("Reset"){
                     resetLevel()
                 }
                     .padding()
