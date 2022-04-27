@@ -20,10 +20,10 @@ class Player: Identifiable {
 
 // Main Display and Game Calculations
 struct ContentView: View {
-    
-    @State private var updaterPos = CGPoint(x: UIScreen.main.bounds.width/2, y:-10)
+
+    @State private var updaterPos = CGPoint(x: UIScreen.main.bounds.width/2, y: -10)
     @State private var enemieHealth: CGFloat = 10
-    
+
     @State private var damage: Int = 0
 
     // tower types
@@ -54,13 +54,13 @@ struct ContentView: View {
     var banklocation: CGPoint {
         return CGPoint(x: Width/5, y: Height-(15*Height/16))
     }
-    var ResetLocation : CGPoint {
+    var ResetLocation: CGPoint {
         return CGPoint(x: Width-Width/5, y: Height-(1*Height/16))
     }
 
     let start = CGPoint(x: UIScreen.main.bounds.width/2, y: .zero)
     let pt1 = CGPoint(x: 200, y: UIScreen.main.bounds.height/2)
-    let end = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height)   
+    let end = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height)
     let timerPT = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()
     let timerT = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
 
@@ -72,7 +72,6 @@ struct ContentView: View {
     let backgroundColor = CGColor(red: 0.42, green: 0.80, blue: 0.47, alpha: 1)
 
     var body: some View {
-        
         // Move enemies and subtract lives if get to player
         player.Lives -= moveEnemies(enemyViewsArray: player.enemyViews)
 

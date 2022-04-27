@@ -7,14 +7,12 @@
 
 import SwiftUI
 
-//Main Game Driver
+// Main Game Driver
 @main
 struct DotsAndBoxesApp: App {
     var body: some Scene {
         WindowGroup {
-            //Menu for Levels
-            //
-            ContentView() //game engine
+            ContentView() // game engine
         }
     }
 }
