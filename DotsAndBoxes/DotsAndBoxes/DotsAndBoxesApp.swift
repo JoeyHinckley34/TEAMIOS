@@ -10,9 +10,18 @@ import SwiftUI
 // Main Game Driver
 @main
 struct DotsAndBoxesApp: App {
+    @State var showGame = false
     var body: some Scene {
         WindowGroup {
-            ContentView() // game engine
+           Menu("Menu") {
+                Button("Start", action: start)
+                Button("Exit to menu", action: menu)
+            }
+            if(showGame){
+                ContentView() // game engine
+            }
         }
     }
+    func start() { showGame = true  }
+    func menu()  { showGame = false }
 }
