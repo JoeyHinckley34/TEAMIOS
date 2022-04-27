@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 //Tower View Struct, required to display tower classes
-struct NewView: Identifiable {
+struct TowerView: Identifiable {
     var id = UUID()
     var tower: Tower
     //var location:CGPoint
