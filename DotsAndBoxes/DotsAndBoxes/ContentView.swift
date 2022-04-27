@@ -10,7 +10,7 @@ import SwiftUI
 class Player: Identifiable {
     var Bank:Double
     var Lives:Double
-    var novelViews:[NewView] = []
+    var towerViews:[TowerView] = []
     var enemyViews:[EnemieView] = appendNewWave(initialEV: [])
     init(bank: Double, lives: Double){
         Bank = bank
@@ -35,7 +35,7 @@ struct ContentView: View {
     var LvlBank:Double = 200
     var player:Player = Player(bank: 200, lives: 5)
     
-    //@State var novelViews:[NewView] = []
+    //@State var towerViews.:[TowerView] = []
     //@State var enemyViews:[EnemieView] = appendNewWave(initialEV: [])
     @State var lastTapLocation:CGPoint = .zero
 
@@ -93,7 +93,7 @@ struct ContentView: View {
             resetLevel()
         }
         //towers find enemies and attack those in range
-        for t in player.novelViews {
+        for t in player.towerViews {
             t.tower.detectEnemies(enemyArray: player.enemyViews)
             player.Bank += t.tower.attack()
         }
@@ -109,7 +109,7 @@ struct ContentView: View {
                 
                
                 
-                Button ("Reset: \(self.towers[self.towerStyle])"){
+                Button ("Reset"){
                     resetLevel()
                 }
                     .padding()
@@ -164,7 +164,7 @@ struct ContentView: View {
                     .position(banklocation)
                 
                 //DISPLAYING TOWERS
-                ForEach(player.novelViews, id: \.id) { thisView in
+                ForEach(player.towerViews, id: \.id) { thisView in
                     let thisTower: Tower = thisView.tower
                     let reloadBoxWidth: CGFloat = 20
                     let reloadPercent: CGFloat = thisTower.currentTick / thisTower.shootTick
@@ -202,7 +202,7 @@ struct ContentView: View {
                     var tooClose: Bool
                     tooClose = false
                     /* Unsolved SWIFT ERROR!!!!!!
-                     ForEach(player.novelViews, id: \.id) { t in
+                     ForEach(player.towerViews, id: \.id) { t in
                         var tower:Tower = t.tower
                         if((startLoc.x < (t.location.x - 30) || startLoc.x > (t.location.x + 30)) && (startLoc.y < (t.location.y - 30) || startLoc.y > (t.location.y + 30))){
                             tooClose = true
@@ -213,17 +213,17 @@ struct ContentView: View {
                         print("tap found")
                         //Ensure not on path or in a tower range
                         if (!tooClose && (startLoc.x < (UIScreen.main.bounds.width/2 - 30) || startLoc.x > (UIScreen.main.bounds.width/2 + 30)) && ( startLoc.y < (Height-Height/8))){
-                            let newTower: NewView
+                            let newTower: TowerView
                             switch towerStyle {
                             case 1:
-                                newTower = NewView(tower: FlameThrower(location: startLoc))
+                                newTower = TowerView(tower: FlameThrower(location: startLoc))
                             case 2:
-                                newTower = NewView(tower: Sniper(location: startLoc))
+                                newTower = TowerView(tower: Sniper(location: startLoc))
                             default:
-                                newTower = NewView(tower: Tower(location: startLoc))
+                                newTower = TowerView(tower: Tower(location: startLoc))
                             }
                             if(player.Bank >= newTower.tower.cost){
-                                player.novelViews.append(newTower)
+                                player.towerViews.append(newTower)
                                 player.Bank -= newTower.tower.cost
                             }
                         }
@@ -246,7 +246,7 @@ struct ContentView: View {
     
     //Reset Level: towers, enemies, lives, and bank
     func resetLevel(){
-        player.novelViews = []
+        player.towerViews = []
         player.enemyViews = []
         player.enemyViews = appendNewWave(initialEV: [])
         player.Lives = LvlLives

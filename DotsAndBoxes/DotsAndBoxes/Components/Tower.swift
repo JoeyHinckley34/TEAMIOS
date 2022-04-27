@@ -14,7 +14,7 @@ class Tower: Identifiable{
     var id = UUID()
     var damage: CGFloat = 1
     var shootTick: CGFloat = 2
-    var currentTick: CGFloat = 0
+    var currentTick: CGFloat = 2
     var cost: Double = 50
     var color: Color = Color(CGColor(red: 0.96, green: 0.23, blue: 0.43, alpha: 1))
     var range: CGFloat = 100
@@ -82,6 +82,7 @@ class FlameThrower: Tower{
         super.init(location: location)
         super.towerStyle = TYPE
         super.damage = DAMAGE
+        super.currentTick = FireTickRate
         super.shootTick = FireTickRate
         super.cost = FlameCost
         super.color = Color(CGColor(red: 0, green: 0.23, blue: 0.43, alpha: 1))
@@ -101,6 +102,7 @@ class Sniper: Tower {
         super.init(location: location)
         super.towerStyle = TYPE
         super.damage = DAMAGE
+        super.currentTick = FireTickRate
         super.shootTick = FireTickRate
         super.cost = SniperCost
         super.color = Color(CGColor(red: 0.96, green: 1, blue: 0.43, alpha: 1))
