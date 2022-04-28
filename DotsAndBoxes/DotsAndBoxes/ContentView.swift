@@ -21,11 +21,11 @@ class Player: Identifiable {
     }
 }
 
-class LevelInfo{
-    //element 0 represents the info for level 0, 1 for level 1, etc
+class LevelInfo {
+    // element 0 represents the info for level 0, 1 for level 1, etc
     var Bank: [Double] = [200, 300, 500, 1000]
     var Lives: [Double] = [5, 7, 10, 1]
-    init(){}
+    init() {}
 }
 
 // Main Display and Game Calculations
@@ -39,7 +39,7 @@ struct ContentView: View {
     var towers = ["Default", "FlameThrower", "Sniper", "Sell"]
     @State private var towerStyle = 0
 
-    //Dynamic Level Info and Stats
+    // Dynamic Level Info and Stats
     var lvlInfo: LevelInfo = LevelInfo()
     var lvl: Int = 0
     var player: Player = Player(bank: 200, lives: 5)
@@ -79,14 +79,14 @@ struct ContentView: View {
     let menuOffset: CGFloat = 40
     let distanceBetweenTowers: CGFloat = 30
 
-    //Level UI Colors
+    // Level UI Colors
     let pathColor = CGColor(red: 1, green: 0.85, blue: 0.24, alpha: 1)
     let MenuColor = CGColor(red: 1, green: 0.89, blue: 0.74, alpha: 1)
     let backgroundColor = CGColor(red: 0.42, green: 0.80, blue: 0.47, alpha: 1)
 
     var body: some View {
         checkValues()
-        
+
         // Move enemies and subtract lives if get to player
         player.Lives -= moveEnemies(enemyViewsArray: player.enemyViews)
 
@@ -98,7 +98,7 @@ struct ContentView: View {
             t.tower.detectEnemies(enemyArray: player.enemyViews)
             player.Bank += t.tower.attack()
         }
-        
+
         return Group {
             ZStack {
                 // Menu Path
@@ -160,7 +160,7 @@ struct ContentView: View {
 
                 Text("Bank \(self.player.Bank.stringWithoutTrailingZeros)")
                     .position(banklocation)
-                
+
                 Text("Level \(self.lvl)")
                     .position(lvlLocation)
 
@@ -201,22 +201,23 @@ struct ContentView: View {
                     var startLoc = value.startLocation
                     let endLoc = value.location
 
-                    //Sell Tower or Buy new Tower and place down in location from start of tap gesture
-                    //If statement below checks if it was a valid tap, invalid taps are long draging motions, thus start-end > 10
+                    // Sell Tower or Buy new Tower and place down in location from start of tap gesture
+                    // If statement below checks if it was a valid tap, invalid taps are long draging motions,
+                    // thus start-end > 10
                     if abs(startLoc.x - endLoc.x) <= 10 && abs(startLoc.y - endLoc.y) <= 10 {
                         print("tap found")
                         startLoc = CGPoint(x: startLoc.x, y: startLoc.y - menuOffset)
-                        
-                        //SELL
-                        if(towerStyle == 3){
+
+                        // SELL
+                        if towerStyle == 3 {
                             assert(towers[towerStyle] == "Sell")
                             sellTower(start: startLoc)
                         }
-                        
-                        //Check if can buy
-                        else if(validTowerPlacement(start: startLoc)){
+
+                        // Check if can buy
+                        else if validTowerPlacement(start: startLoc) {
                             let newTower: TowerView
-                            //Determine desired tower type
+                            // Determine desired tower type
                             switch towerStyle {
                             case 1:
                                 newTower = TowerView(tower: FlameThrower(location: startLoc))
@@ -225,7 +226,7 @@ struct ContentView: View {
                             default:
                                 newTower = TowerView(tower: Tower(location: startLoc))
                             }
-                            //Buy
+                            // Buy
                             if player.Bank >= newTower.tower.cost {
                                 player.towerLocations.append(startLoc)
                                 player.towerViews.append(newTower)
@@ -246,53 +247,55 @@ struct ContentView: View {
               }
         }
     }
-    
-    func sellTower(start: CGPoint){
-        //Find tower location if exists
-        var sellingTowerLocation: CGPoint = CGPoint(x: .zero, y:-100) //not possible to place a tower here
+
+    func sellTower(start: CGPoint) {
+        // Find tower location if exists
+        var sellingTowerLocation: CGPoint = CGPoint(x: .zero, y: -100) // not possible to place a tower here
         for towerLocation in player.towerLocations {
-            if((start.x > (towerLocation.x - 5) && start.x < (towerLocation.x + 5)) &&
-               (start.y > (towerLocation.y - 5) && start.y < (towerLocation.y + 5))) {
+            if (start.x > (towerLocation.x - 5) && start.x < (towerLocation.x + 5)) &&
+               (start.y > (towerLocation.y - 5) && start.y < (towerLocation.y + 5)) {
                 sellingTowerLocation = towerLocation
                 break
             }
         }
-        
-        //sell tower
-        if(sellingTowerLocation != CGPoint(x: .zero, y:-100)){
-            //Find the tower with this location
-            //Remove it from player.towerViews and player.towerLocations
+
+        // sell tower
+        if sellingTowerLocation != CGPoint(x: .zero, y: -100) {
+            // Find the tower with this location
+            // Remove it from player.towerViews and player.towerLocations
             let old = player.towerViews
             let tvUpdated = player.towerViews.filter { $0.tower.location != sellingTowerLocation }
             let tlUpdated = player.towerLocations.filter { $0 != sellingTowerLocation }
             player.towerViews = tvUpdated
             player.towerLocations = tlUpdated
-            
+
             var removed: [TowerView] = []
             for t in tlUpdated {
                 removed = old.filter { $0.tower.location != t }
             }
-            //Add currency back to bank
-            if(removed.isEmpty){  return  } //prevents index out of range from below's command
+            // Add currency back to bank
+            if removed.isEmpty { return } // prevents index out of range from below's command
             player.Bank += removed[0].tower.cost/2
         }
-        
     }
-    
-    func validTowerPlacement(start: CGPoint) -> Bool{
+
+    func validTowerPlacement(start: CGPoint) -> Bool {
         var tooClose: Bool = false
         for towerLocation in player.towerLocations {
-            if((start.x > (towerLocation.x - distanceBetweenTowers) && start.x < (towerLocation.x + distanceBetweenTowers)) &&
-               (start.y > (towerLocation.y - distanceBetweenTowers) && start.y < (towerLocation.y + distanceBetweenTowers))) {
+            if (start.x > (towerLocation.x - distanceBetweenTowers) &&
+                start.x < (towerLocation.x + distanceBetweenTowers)) &&
+               (start.y > (towerLocation.y - distanceBetweenTowers) &&
+                start.y < (towerLocation.y + distanceBetweenTowers)) {
                 tooClose = true
             }
         }
-        let notOnPath: Bool = (start.x < (UIScreen.main.bounds.width/2 - 30) || start.x > (UIScreen.main.bounds.width/2 + 30)) && start.y < (Height-Height/8)
+        let notOnPath: Bool = (start.x < (UIScreen.main.bounds.width/2 - 30) ||
+                               start.x > (UIScreen.main.bounds.width/2 + 30)) && start.y < (Height-Height/8)
         return !tooClose && notOnPath
     }
-    
-    func checkValues(){
-        if(player.firstRun){
+
+    func checkValues() {
+        if player.firstRun {
             player.firstRun = false
             resetLevel()
         }
@@ -331,7 +334,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static let levelPreview = 0
-    
+
     static var previews: some View {
         ContentView(lvl: levelPreview)
     }

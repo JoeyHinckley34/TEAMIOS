@@ -22,26 +22,26 @@ struct DotsAndBoxesApp: App {
                Button("Level 3", action: lvl3)
                Button("Exit to menu", action: menu)
             }
-            if(showGame){
+            if showGame {
                 ContentView(lvl: lvl) // game engine
             }
         }
     }
-    func endless()  {
+    func endless() {
         showGame = true
         lvl = 0
     }
-    func lvl1()     {
+    func lvl1() {
         showGame = true
         lvl = 1
     }
-    func lvl2()     {
+    func lvl2() {
         showGame = true
         lvl = 2
     }
-    func lvl3()     {
+    func lvl3() {
         showGame = true
         lvl = 3
     }
-    func menu()     { showGame = false }
+    func menu() { showGame = false }
 }
