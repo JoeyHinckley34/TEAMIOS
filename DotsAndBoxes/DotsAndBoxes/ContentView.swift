@@ -11,6 +11,7 @@ class Player: Identifiable {
     var Bank: Double
     var Lives: Double
     var towerViews: [TowerView] = []
+    var towerLocations: [CGPoint] = []
     var enemyViews: [EnemieView] = appendNewWave(initialEV: [])
     var firstRun: Bool
     init(bank: Double, lives: Double) {
@@ -21,6 +22,7 @@ class Player: Identifiable {
 }
 
 class LevelInfo{
+    //element 0 represents the info for level 0, 1 for level 1, etc
     var Bank: [Double] = [200, 300, 500, 1000]
     var Lives: [Double] = [5, 7, 10, 1]
     init(){}
@@ -31,19 +33,17 @@ struct ContentView: View {
 
     @State private var updaterPos = CGPoint(x: UIScreen.main.bounds.width/2, y: -100)
     @State private var enemieHealth: CGFloat = 10
-
     @State private var damage: Int = 0
 
     // tower types
-    var towers = ["Default", "FlameThrower", "Sniper"]
+    var towers = ["Default", "FlameThrower", "Sniper", "Sell"]
     @State private var towerStyle = 0
 
+    //Dynamic Level Info and Stats
     var lvlInfo: LevelInfo = LevelInfo()
     var lvl: Int = 0
     var player: Player = Player(bank: 200, lives: 5)
 
-    // @State var towerViews.:[TowerView] = []
-    // @State var enemyViews:[EnemieView] = appendNewWave(initialEV: [])
     @State var lastTapLocation: CGPoint = .zero
 
     var Width: CGFloat {
@@ -76,10 +76,12 @@ struct ContentView: View {
     let timerT = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
 
     @GestureState private var dragState = DragState.inactive
+    let menuOffset: CGFloat = 40
+    let distanceBetweenTowers: CGFloat = 30
 
+    //Level UI Colors
     let pathColor = CGColor(red: 1, green: 0.85, blue: 0.24, alpha: 1)
     let MenuColor = CGColor(red: 1, green: 0.89, blue: 0.74, alpha: 1)
-    let towerColor = CGColor(red: 0.20, green: 0.24, blue: 51, alpha: 1)
     let backgroundColor = CGColor(red: 0.42, green: 0.80, blue: 0.47, alpha: 1)
 
     var body: some View {
@@ -196,27 +198,25 @@ struct ContentView: View {
                     state = .dragging(translation: drag.translation)
                 }
                 .onEnded { value in // end of tap gesture
-                    let startLoc = value.startLocation
+                    var startLoc = value.startLocation
                     let endLoc = value.location
 
-                    var tooClose: Bool
-                    tooClose = false
-                    /* Unsolved SWIFT ERROR!!!!!!
-                     ForEach(player.towerViews, id: \.id) { t in
-                        var tower:Tower = t.tower
-                        if((startLoc.x < (t.location.x - 30) || startLoc.x > (t.location.x + 30))
-                            && (startLoc.y < (t.location.y - 30) || startLoc.y > (t.location.y + 30))) {
-                            tooClose = true
-                        }
-                    }*/
-                    // Buy new Tower and place down in location from end of tap gesture
+                    //Sell Tower or Buy new Tower and place down in location from start of tap gesture
+                    //If statement below checks if it was a valid tap, invalid taps are long draging motions, thus start-end > 10
                     if abs(startLoc.x - endLoc.x) <= 10 && abs(startLoc.y - endLoc.y) <= 10 {
                         print("tap found")
-                        // Ensure not on path or in a tower range
-                        if !tooClose && (startLoc.x < (UIScreen.main.bounds.width/2 - 30) ||
-                                         startLoc.x > (UIScreen.main.bounds.width/2 + 30)) &&
-                            startLoc.y < (Height-Height/8) {
+                        startLoc = CGPoint(x: startLoc.x, y: startLoc.y - menuOffset)
+                        
+                        //SELL
+                        if(towerStyle == 3){
+                            assert(towers[towerStyle] == "Sell")
+                            sellTower(start: startLoc)
+                        }
+                        
+                        //Check if can buy
+                        else if(validTowerPlacement(start: startLoc)){
                             let newTower: TowerView
+                            //Determine desired tower type
                             switch towerStyle {
                             case 1:
                                 newTower = TowerView(tower: FlameThrower(location: startLoc))
@@ -225,7 +225,9 @@ struct ContentView: View {
                             default:
                                 newTower = TowerView(tower: Tower(location: startLoc))
                             }
+                            //Buy
                             if player.Bank >= newTower.tower.cost {
+                                player.towerLocations.append(startLoc)
                                 player.towerViews.append(newTower)
                                 player.Bank -= newTower.tower.cost
                             }
@@ -245,6 +247,50 @@ struct ContentView: View {
         }
     }
     
+    func sellTower(start: CGPoint){
+        //Find tower location if exists
+        var sellingTowerLocation: CGPoint = CGPoint(x: .zero, y:-100) //not possible to place a tower here
+        for towerLocation in player.towerLocations {
+            if((start.x > (towerLocation.x - 5) && start.x < (towerLocation.x + 5)) &&
+               (start.y > (towerLocation.y - 5) && start.y < (towerLocation.y + 5))) {
+                sellingTowerLocation = towerLocation
+                break
+            }
+        }
+        
+        //sell tower
+        if(sellingTowerLocation != CGPoint(x: .zero, y:-100)){
+            //Find the tower with this location
+            //Remove it from player.towerViews and player.towerLocations
+            let old = player.towerViews
+            let tvUpdated = player.towerViews.filter { $0.tower.location != sellingTowerLocation }
+            let tlUpdated = player.towerLocations.filter { $0 != sellingTowerLocation }
+            player.towerViews = tvUpdated
+            player.towerLocations = tlUpdated
+            
+            var removed: [TowerView] = []
+            for t in tlUpdated {
+                removed = old.filter { $0.tower.location != t }
+            }
+            //Add currency back to bank
+            if(removed.isEmpty){  return  } //prevents index out of range from below's command
+            player.Bank += removed[0].tower.cost/2
+        }
+        
+    }
+    
+    func validTowerPlacement(start: CGPoint) -> Bool{
+        var tooClose: Bool = false
+        for towerLocation in player.towerLocations {
+            if((start.x > (towerLocation.x - distanceBetweenTowers) && start.x < (towerLocation.x + distanceBetweenTowers)) &&
+               (start.y > (towerLocation.y - distanceBetweenTowers) && start.y < (towerLocation.y + distanceBetweenTowers))) {
+                tooClose = true
+            }
+        }
+        let notOnPath: Bool = (start.x < (UIScreen.main.bounds.width/2 - 30) || start.x > (UIScreen.main.bounds.width/2 + 30)) && start.y < (Height-Height/8)
+        return !tooClose && notOnPath
+    }
+    
     func checkValues(){
         if(player.firstRun){
             player.firstRun = false
@@ -255,6 +301,7 @@ struct ContentView: View {
     // Reset Level: towers, enemies, lives, and bank
     func resetLevel() {
         player.towerViews = []
+        player.towerLocations = []
         player.enemyViews = []
         player.enemyViews = appendNewWave(initialEV: [])
         player.Bank =  lvlInfo.Bank[lvl]
